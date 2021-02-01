@@ -8,6 +8,7 @@ function Families() {
         <Table bordered hover>
           <thead>
             <tr>
+              <th>ID</th>
               <th>Name</th>
               <th># of members</th>
               <th>Members</th>
@@ -19,6 +20,7 @@ function Families() {
           <tbody>
 
             <tr>
+                <td>Auto</td>
               <td>
                 <Form>
                   <Form.Control size="m" type="text" placeholder="Name" />
@@ -33,6 +35,7 @@ function Families() {
             </tr>
 
             <tr>
+              <th>1</th>
               <td>Omerta</td>
               <td>1</td>
               <td><Button type="showHideSubTable">Show Members</Button></td>
@@ -44,6 +47,7 @@ function Families() {
             </tr>
 
             <tr>
+              <th>2</th>
               <td>Murphy</td>
               <td>5</td>
               <td><Button type="showHideSubTable">Show Members</Button></td>
@@ -55,6 +59,7 @@ function Families() {
             </tr>
 
             <tr>
+              <th>3</th>
               <td>Scott</td>
               <td>2</td>
               <td><Button type="showHideSubTable">Show Members</Button></td>

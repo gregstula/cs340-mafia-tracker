@@ -1,6 +1,7 @@
 import {Navbar,Nav} from 'react-bootstrap';
 import Families from './components/Families';
 import Individuals from './components/Individuals';
+import Laws from './components/Laws';
 import {HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -14,6 +15,7 @@ function App() {
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/families">Families</Nav.Link>
             <Nav.Link as={Link} to="/individuals">Individuals</Nav.Link>
+            <Nav.Link as={Link} to="/laws">Laws</Nav.Link>
             </Nav>
         </Navbar>
         {/* A <Switch> looks through its children <Route>s and
@@ -24,6 +26,9 @@ function App() {
           </Route>
           <Route path="/families">
             <Families />
+          </Route>
+          <Route path="/laws">
+            <Laws />
           </Route>
           <Route path="/">
             <Home />
