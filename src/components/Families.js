@@ -1,6 +1,10 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 
+
+
+
+
 function Families() {
      return (
       <Container>
@@ -17,6 +21,7 @@ function Families() {
           </thead>
 
           <tbody>
+
             <tr>
               <td>
                 <Form>
@@ -36,34 +41,10 @@ function Families() {
               <td>1</td>
               <td><Button type="showHideSubTable">Show Members</Button></td>
               <td><Button type="showHideSubTable">Show Businesses</Button></td>
-              <td>
-                <Button type="update">Update</Button>
-                <Button type="delete">Delete</Button>
-              </td>
+              <td><Actions /></td>
             </tr>
             <tr>
-              <td colSpan="5">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Role</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Bill</td>
-                      <td>Omerta</td>
-                      <td>Godfather</td>
-                      <td>
-                        <Button type="delete">Delete</Button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </td>
+              <td colSpan="5"><IndividualSubTable fname="Bill" lname="Omerta" role="Godfather" /></td>
             </tr>
 
             <tr>
@@ -71,36 +52,10 @@ function Families() {
               <td>5</td>
               <td><Button type="showHideSubTable">Show Members</Button></td>
               <td><Button type="showHideSubTable">Show Businesses</Button></td>
-              <td>
-                <Button type="update">Update</Button>
-                <Button type="delete">Delete</Button>
-              </td>
+              <td><Actions /></td>
             </tr>
             <tr>
-              <td colSpan="5">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Business Name</th>
-                      <th>Street Address</th>
-                      <th>City</th>
-                      <th>State</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Domino's</td>
-                      <td>23213 NW Road Blvd</td>
-                      <td>Corvallis</td>
-                      <td>Oregon</td>
-                      <td>
-                        <Button type="delete">Delete</Button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </td>
+              <td colSpan="5"><BusinessSubTable name="Domino's" streetAddress="54232 NW Road Blvd" city="Corvallis" state="Oregon"/></td>
             </tr>
 
             <tr>
@@ -108,66 +63,87 @@ function Families() {
               <td>2</td>
               <td><Button type="showHideSubTable">Show Members</Button></td>
               <td><Button type="showHideSubTable">Show Businesses</Button></td>
-              <td>
-                <Button type="update">Update</Button>
-                <Button type="delete">Delete</Button>
-              </td>
+              <td><Actions /></td>
             </tr>
             <tr>
-              <td colSpan="5">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>First Name</th>
-                      <th>Last Name</th>
-                      <th>Role</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Michael</td>
-                      <td>Scott</td>
-                      <td>Regional Manager</td>
-                      <td>
-                        <Button type="delete">Delete</Button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </td>
+              <td colSpan="5"><IndividualSubTable fname="Michael" lname="Scott" role="Regional Manager" /></td>
             </tr>
             <tr>
-              <td colSpan="5">
-                <Table striped bordered hover>
-                  <thead>
-                    <tr>
-                      <th>Business Name</th>
-                      <th>Street Address</th>
-                      <th>City</th>
-                      <th>State</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Dunder Mifflin</td>
-                      <td>23213 NW Road Blvd</td>
-                      <td>Pawnee</td>
-                      <td>Indiana</td>
-                      <td>
-                        <Button type="delete">Delete</Button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </Table>
-              </td>
+              <td colSpan="5"><BusinessSubTable name="Dunder Mifflin" streetAddress="48372 NW Road Blvd" city="Pawnee" state="Indiana"/></td>
             </tr>
 
           </tbody>
         </Table>
       </Container>
   );
+}
+
+
+function BusinessSubTable(business) {
+  return (
+    <Container>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Business Name</th>
+            <th>Street Address</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{business.name}</td>
+            <td>{business.streetAddress}</td>
+            <td>{business.city}</td>
+            <td>{business.state}</td>
+            <td>
+              <Button type="delete">Delete</Button>
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+    </Container>
+  );
+}
+
+
+function IndividualSubTable(person) {
+  return (
+    <Container>
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{person.fname}</td>
+            <td>{person.lname}</td>
+            <td>{person.role}</td>
+            <td>
+              <Button type="delete">Delete</Button>
+            </td>
+          </tr>
+        </tbody>
+      </Table>
+    </Container>
+  );
+}
+
+
+function Actions() {
+    return (
+      <Container>
+        <Button type="update">Update</Button>
+        <Button type="delete">Delete</Button>
+      </Container>
+   );
 }
 
 
