@@ -3,7 +3,7 @@ import {Container, Form, Button} from 'react-bootstrap';
 function Individuals() {
      return (
       <Container>
-      <h1>Families</h1>
+      <h1>Individuals</h1>
         <div>
           <Form>
             <Form.Label>First Name</Form.Label>

@@ -9,7 +9,7 @@ function App() {
     <Router>
       <div>
         <Navbar bg="dark" variant="dark">
-        <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+        <Navbar.Brand>Navbar</Navbar.Brand>
             <Nav className="mr-auto">
             <Nav.Link as={Link} to="/">Home</Nav.Link>
             <Nav.Link as={Link} to="/families">Families</Nav.Link>
