@@ -1,5 +1,6 @@
-import logo from './logo.svg';
-import {Navbar,Nav} from 'react-bootstrap';
+import {Container, Navbar,Nav} from 'react-bootstrap';
+import Families from './components/Families';
+import Individuals from './components/Individuals';
 import {HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
 import './App.css';
 
@@ -34,15 +35,12 @@ function App() {
 }
 
 function Home() {
-  return <h2>Home</h2>;
-}
-
-function Families() {
-  return <h2>Families</h2>;
-}
-
-function Individuals() {
-  return <h2>Individuals</h2>;
+    return (
+    <div>
+        <h2>Welcome to Mafia tracker!</h2>
+        Please use the links in the navigation bar to manage your entries.
+    </div>
+    );
 }
 
 
