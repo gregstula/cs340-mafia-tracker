@@ -1,10 +1,6 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 
-
-
-
-
 function Families() {
      return (
       <Container>
@@ -25,7 +21,7 @@ function Families() {
             <tr>
               <td>
                 <Form>
-                  <Form.Control size="lg" type="text" placeholder="Name" />
+                  <Form.Control size="m" type="text" placeholder="Name" />
                 </Form>
               </td>
               <td>#</td>
@@ -55,7 +51,7 @@ function Families() {
               <td><Actions /></td>
             </tr>
             <tr>
-              <td colSpan="5"><BusinessSubTable name="Domino's" streetAddress="54232 NW Road Blvd" city="Corvallis" state="Oregon"/></td>
+              <td colSpan="5"><BusinessSubTable name="Domino's" buildingNum="54232" streetName="NW Road Blvd" city="Corvallis" state="Oregon" zip="97331"/></td>
             </tr>
 
             <tr>
@@ -69,7 +65,7 @@ function Families() {
               <td colSpan="5"><IndividualSubTable fname="Michael" lname="Scott" role="Regional Manager" /></td>
             </tr>
             <tr>
-              <td colSpan="5"><BusinessSubTable name="Dunder Mifflin" streetAddress="48372 NW Road Blvd" city="Pawnee" state="Indiana"/></td>
+              <td colSpan="5"><BusinessSubTable name="Dunder Mifflin" buildingNum="48372" streetName="NW Road Blvd" city="Pawnee" state="Indiana" zip="95732"/></td>
             </tr>
 
           </tbody>
@@ -82,22 +78,27 @@ function Families() {
 function BusinessSubTable(business) {
   return (
     <Container>
+      <b>Businesses Owned</b>
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>Business Name</th>
-            <th>Street Address</th>
+            <th>Building Number</th>
+            <th>Street Name</th>
             <th>City</th>
             <th>State</th>
+            <th>Zip Code</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr>
             <td>{business.name}</td>
-            <td>{business.streetAddress}</td>
+            <td>{business.buildingNum}</td>
+            <td>{business.streetName}</td>
             <td>{business.city}</td>
             <td>{business.state}</td>
+            <td>{business.zip}</td>
             <td>
               <Button type="delete">Delete</Button>
             </td>
@@ -112,6 +113,7 @@ function BusinessSubTable(business) {
 function IndividualSubTable(person) {
   return (
     <Container>
+      <b>Members</b>
       <Table striped bordered hover>
         <thead>
           <tr>
