@@ -1,23 +1,26 @@
 {
   "files": {
     "main.css": "/cs340-mafia-tracker/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/cs340-mafia-tracker/static/js/main.968653b2.chunk.js",
-    "main.js.map": "/cs340-mafia-tracker/static/js/main.968653b2.chunk.js.map",
-    "runtime-main.js": "/cs340-mafia-tracker/static/js/runtime-main.8bdacd1b.js",
-    "runtime-main.js.map": "/cs340-mafia-tracker/static/js/runtime-main.8bdacd1b.js.map",
-    "static/js/2.67804478.chunk.js": "/cs340-mafia-tracker/static/js/2.67804478.chunk.js",
-    "static/js/2.67804478.chunk.js.map": "/cs340-mafia-tracker/static/js/2.67804478.chunk.js.map",
-    "static/js/3.8b898f87.chunk.js": "/cs340-mafia-tracker/static/js/3.8b898f87.chunk.js",
-    "static/js/3.8b898f87.chunk.js.map": "/cs340-mafia-tracker/static/js/3.8b898f87.chunk.js.map",
+    "main.js": "/cs340-mafia-tracker/static/js/main.37693164.chunk.js",
+    "main.js.map": "/cs340-mafia-tracker/static/js/main.37693164.chunk.js.map",
+    "runtime-main.js": "/cs340-mafia-tracker/static/js/runtime-main.55b2dde9.js",
+    "runtime-main.js.map": "/cs340-mafia-tracker/static/js/runtime-main.55b2dde9.js.map",
+    "static/css/2.658248ec.chunk.css": "/cs340-mafia-tracker/static/css/2.658248ec.chunk.css",
+    "static/js/2.f6d499a5.chunk.js": "/cs340-mafia-tracker/static/js/2.f6d499a5.chunk.js",
+    "static/js/2.f6d499a5.chunk.js.map": "/cs340-mafia-tracker/static/js/2.f6d499a5.chunk.js.map",
+    "static/js/3.c4c0b9ac.chunk.js": "/cs340-mafia-tracker/static/js/3.c4c0b9ac.chunk.js",
+    "static/js/3.c4c0b9ac.chunk.js.map": "/cs340-mafia-tracker/static/js/3.c4c0b9ac.chunk.js.map",
     "index.html": "/cs340-mafia-tracker/index.html",
+    "static/css/2.658248ec.chunk.css.map": "/cs340-mafia-tracker/static/css/2.658248ec.chunk.css.map",
     "static/css/main.8c8b27cf.chunk.css.map": "/cs340-mafia-tracker/static/css/main.8c8b27cf.chunk.css.map",
-    "static/js/2.67804478.chunk.js.LICENSE.txt": "/cs340-mafia-tracker/static/js/2.67804478.chunk.js.LICENSE.txt",
+    "static/js/2.f6d499a5.chunk.js.LICENSE.txt": "/cs340-mafia-tracker/static/js/2.f6d499a5.chunk.js.LICENSE.txt",
     "static/media/logo.6ce24c58.svg": "/cs340-mafia-tracker/static/media/logo.6ce24c58.svg"
   },
   "entrypoints": [
-    "static/js/runtime-main.8bdacd1b.js",
-    "static/js/2.67804478.chunk.js",
+    "static/js/runtime-main.55b2dde9.js",
+    "static/css/2.658248ec.chunk.css",
+    "static/js/2.f6d499a5.chunk.js",
     "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.968653b2.chunk.js"
+    "static/js/main.37693164.chunk.js"
   ]
 }
