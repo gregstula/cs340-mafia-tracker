@@ -148,11 +148,4 @@ function Actions() {
    );
 }
 
-
 export default Families;
-
-
-// <Form>
-//     <Form.Control size="lg" type="text" placeholder="Name" />
-// </Form>
-//     <Button type="submit">Submit</Button>
