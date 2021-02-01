@@ -1,4 +1,4 @@
-import {Container, Navbar,Nav} from 'react-bootstrap';
+import {Navbar,Nav} from 'react-bootstrap';
 import Families from './components/Families';
 import Individuals from './components/Individuals';
 import {HashRouter as Router, Switch, Route, Link } from 'react-router-dom';
