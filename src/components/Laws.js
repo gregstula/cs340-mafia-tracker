@@ -1,13 +1,10 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
-
-
-
-
+import Actions from './Actions'
 
 function Laws() {
      return (
-      <Container>
+      <Container fluid>
       <h1>Laws</h1>
         <Table bordered hover>
           <thead>
@@ -19,7 +16,6 @@ function Laws() {
               <th>Actions</th>
             </tr>
           </thead>
-
           <tbody>
            <tr>
                <td>
@@ -44,17 +40,14 @@ function Laws() {
               <td>1</td>
               <td>Extortion</td>
               <td>3 years</td>
-              <td><Button type="showHideSubTable">Show Members</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
             <td colSpan="5">
                     <IndividualSubTable>
-                        <IndividualEntry    fname="Bill" lname="Omerta" role="Godfather" />
-                        <IndividualEntry fname="Joe" lname="Alpha" role="Godfather" />
                         <IndividualEntry fname="Andrew" lname="Douglas" role="Godfather" />
                         <IndividualEntry fname="Tony" lname="Soprano" role="Godfather" />
-                        <IndividualEntry fname="Oliver" lname="Twist" role="Godfather" />
                     </IndividualSubTable>
                 </td>
 
@@ -64,14 +57,12 @@ function Laws() {
               <td>2</td>
               <td>Fraud</td>
               <td>10 years</td>
-              <td><Button type="showHideSubTable">Show Members</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
                 <td colSpan="5">
                     <IndividualSubTable>
-                        <IndividualEntry    fname="Bill" lname="Omerta" role="Godfather" />
-                        <IndividualEntry fname="Joe" lname="Alpha" role="Godfather" />
                         <IndividualEntry fname="Andrew" lname="Douglas" role="Godfather" />
                         <IndividualEntry fname="Tony" lname="Soprano" role="Godfather" />
                         <IndividualEntry fname="Oliver" lname="Twist" role="Godfather" />
@@ -83,7 +74,7 @@ function Laws() {
               <td>3</td>
               <td>Tax Evasion</td>
               <td>15 years</td>
-              <td><Button type="showHideSubTable">Show Members</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -118,6 +109,7 @@ function IndividualEntry(props) {
 function IndividualSubTable(props) {
   return (
     <Container>
+        <b>Law Breakers</b>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -133,17 +125,6 @@ function IndividualSubTable(props) {
       </Table>
     </Container>
   );
-}
-
-
-
-function Actions() {
-    return (
-      <Container>
-        <Button type="update">Update</Button>
-        <Button type="delete">Delete</Button>
-      </Container>
-   );
 }
 
 

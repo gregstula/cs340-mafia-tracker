@@ -1,13 +1,10 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
-
-
-
-
+import Actions from './Actions'
 
 function Families() {
      return (
-      <Container>
+      <Container fluid>
       <h1>Families</h1>
         <Table bordered hover>
           <thead>
@@ -34,7 +31,7 @@ function Families() {
               <td></td>
               <td></td>
               <td>
-                <Button type="submit">Submit</Button>
+                <Button type="submit">Create</Button>
               </td>
             </tr>
 
@@ -42,8 +39,8 @@ function Families() {
               <th>1</th>
               <td>Omerta</td>
               <td>1</td>
-              <td><Button type="showHideSubTable">Show Members</Button></td>
-              <td><Button type="showHideSubTable">Show Businesses</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -54,8 +51,8 @@ function Families() {
               <th>2</th>
               <td>Murphy</td>
               <td>5</td>
-              <td><Button type="showHideSubTable">Show Members</Button></td>
-              <td><Button type="showHideSubTable">Show Businesses</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -66,8 +63,8 @@ function Families() {
               <th>3</th>
               <td>Scott</td>
               <td>2</td>
-              <td><Button type="showHideSubTable">Show Members</Button></td>
-              <td><Button type="showHideSubTable">Show Businesses</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -87,6 +84,7 @@ function Families() {
 function BusinessSubTable(business) {
   return (
     <Container>
+        <b>Business Owned</b>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -117,6 +115,7 @@ function BusinessSubTable(business) {
 function IndividualSubTable(person) {
   return (
     <Container>
+        <b>Members</b>
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -142,13 +141,5 @@ function IndividualSubTable(person) {
 }
 
 
-function Actions() {
-    return (
-      <Container>
-        <Button type="update">Update</Button>
-        <Button type="delete">Delete</Button>
-      </Container>
-   );
-}
 
 export default Families;
