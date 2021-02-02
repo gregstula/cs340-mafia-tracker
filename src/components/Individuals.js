@@ -17,6 +17,7 @@ function Individuals() {
         <Table bordered hover>
           <thead>
             <tr>
+              <th>ID</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Age</th>
@@ -30,6 +31,7 @@ function Individuals() {
           <tbody>
 
             <tr>
+                <td>Auto</td>
               <td>
                 <Form>
                   <Form.Control size="m" type="text" placeholder="First Name" />
@@ -57,39 +59,42 @@ function Individuals() {
               </td>
               <td></td>
               <td>
-                <Button type="submit">Submit</Button>
+                <Button size="sm" type="submit">Create</Button>
               </td>
             </tr>
 
             <tr>
+              <td>1</td>
               <td>Bill</td>
               <td>Omerta</td>
               <td>40</td>
               <td>Omerta</td>
               <td>Godfather</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr><td colSpan="10"><LawsBrokenSubTable name="murder" sentence="death" /></td></tr>
 
             <tr>
+              <td>2</td>
               <td>Bob</td>
               <td>Odenkirk</td>
               <td>45</td>
               <td>N/A</td>
               <td>N/A</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr><td colSpan="10"><LawsBrokenSubTable name="blackmail" sentence="2-5 years" /></td></tr>
 
             <tr>
+              <td>3</td>
               <td>Elon</td>
               <td>Musk</td>
               <td>49</td>
               <td>N/A</td>
               <td>N/A</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button szie="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
           </tbody>
@@ -116,7 +121,7 @@ function LawsBrokenSubTable(law) {
             <td>{law.name}</td>
             <td>{law.sentence}</td>
             <td>
-              <Button type="delete">Delete</Button>
+              <Button variant="danger" size="sm" type="delete">Delete</Button>
             </td>
           </tr>
         </tbody>

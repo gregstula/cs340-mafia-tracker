@@ -33,14 +33,14 @@ function Laws() {
               </td>
               <td></td>
               <td>
-                <Button type="submit">Submit</Button>
+                <Button szie="sm" type="submit">Create</Button>
               </td>
             </tr>
             <tr>
               <td>1</td>
               <td>Extortion</td>
               <td>3 years</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -57,7 +57,7 @@ function Laws() {
               <td>2</td>
               <td>Fraud</td>
               <td>10 years</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -74,7 +74,7 @@ function Laws() {
               <td>3</td>
               <td>Tax Evasion</td>
               <td>15 years</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -101,7 +101,7 @@ function IndividualEntry(props) {
             <td>{props.fname}</td>
             <td>{props.lname}</td>
             <td>{props.role}</td>
-            <td><Button type="delete">Delete</Button></td>
+            <td><Button size="sm" variant="danger" type="delete">Delete</Button></td>
           </tr>
     );
 }

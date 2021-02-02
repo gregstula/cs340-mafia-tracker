@@ -31,7 +31,7 @@ function Families() {
               <td></td>
               <td></td>
               <td>
-                <Button type="submit">Create</Button>
+                <Button size="sm" type="submit">Create</Button>
               </td>
             </tr>
 
@@ -39,8 +39,8 @@ function Families() {
               <th>1</th>
               <td>Omerta</td>
               <td>1</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -51,8 +51,8 @@ function Families() {
               <th>2</th>
               <td>Murphy</td>
               <td>5</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -63,8 +63,8 @@ function Families() {
               <th>3</th>
               <td>Scott</td>
               <td>2</td>
-              <td><Button type="showHideSubTable">Show</Button></td>
-              <td><Button type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
+              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -102,7 +102,7 @@ function BusinessSubTable(business) {
             <td>{business.city}</td>
             <td>{business.state}</td>
             <td>
-              <Button type="delete">Delete</Button>
+              <Button size="sm" variant="danger" type="delete">Delete</Button>
             </td>
           </tr>
         </tbody>
@@ -131,7 +131,7 @@ function IndividualSubTable(person) {
             <td>{person.lname}</td>
             <td>{person.role}</td>
             <td>
-              <Button type="delete">Delete</Button>
+              <Button size="sm" variant="danger" type="delete">Delete</Button>
             </td>
           </tr>
         </tbody>

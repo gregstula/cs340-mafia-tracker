@@ -3,9 +3,8 @@ import {Container, Button} from 'react-bootstrap';
 function Actions() {
     return (
       <Container>
-        <Button type="update">Update</Button>
-        &nbsp;&nbsp;&nbsp;
-        <Button type="delete">Delete</Button>
+        <Button type="update" size="sm" className="mr-1">Update</Button>
+        <Button type="delete" variant="danger" size="sm">Delete</Button>
       </Container>
    );
 }
