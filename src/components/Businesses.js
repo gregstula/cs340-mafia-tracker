@@ -73,8 +73,8 @@ function Businesses() {
               <td>Main St.</td>
               <td>New York</td>
               <td>New York</td>
-              <td>Tony Soprano</td>
               <td>32212</td>
+              <td>Tony Soprano</td>
               <td><Actions /></td>
             </tr>
             <tr>
@@ -84,8 +84,8 @@ function Businesses() {
               <td>Wall St.</td>
               <td>New York</td>
               <td>New York</td>
-              <td>Elon Musk</td>
               <td>80192</td>
+              <td>Elon Musk</td>
               <td><Actions /></td>
             </tr>
           </tbody>
