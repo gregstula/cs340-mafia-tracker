@@ -1,5 +1,5 @@
 import {Container, Form, Button} from 'react-bootstrap';
-//import Actions from './Actions';
+import Actions from './Actions';
 import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
@@ -82,7 +82,7 @@ function Businesses() {
               <td>Tony Soprano</td>
               <td>Soprano</td>
               <td>
-                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverBaseActions}>
                   <Button size="sm" type="actionsButton">Actions</Button>
                 </OverlayTrigger>
               </td>
@@ -98,7 +98,7 @@ function Businesses() {
               <td>Elon Musk</td>
               <td></td>
               <td>
-                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverBaseActions}>
                   <Button size="sm" type="actionsButton">Actions</Button>
                 </OverlayTrigger>
               </td>
@@ -110,14 +110,13 @@ function Businesses() {
 }
 
 
-const popoverLawActions = (
+const popoverBaseActions = (
   <Popover id="popover-basic">
     <Popover.Content>
-      <Button type="update" size="sm" className="mr-1">Update</Button>
-      <br></br><br></br>
-      <Button type="delete" variant="danger" size="sm">Delete</Button>
+      <Actions />
     </Popover.Content>
   </Popover>
 );
+
 
 export default Businesses;

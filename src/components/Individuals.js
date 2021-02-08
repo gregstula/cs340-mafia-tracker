@@ -1,6 +1,6 @@
 //
 import {Container, Form, Button} from 'react-bootstrap';
-//import Actions from './Actions';
+import Actions from './Actions';
 import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
@@ -148,9 +148,7 @@ const popoverIndividualActions = (
       <br></br><br></br>
       <Button size="sm" type="showHideSubTable">Show businesses</Button>
       <br></br><br></br>
-      <Button type="update" size="sm" className="mr-1">Update</Button>
-      <br></br><br></br>
-      <Button type="delete" variant="danger" size="sm">Delete</Button>
+      <Actions />
     </Popover.Content>
   </Popover>
 );

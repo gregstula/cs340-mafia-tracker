@@ -1,6 +1,6 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
-//import Actions from './Actions'
+import Actions from './Actions'
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Popover from 'react-bootstrap/Popover'
 import PopoverContent from 'react-bootstrap/PopoverContent'
@@ -154,9 +154,7 @@ const popoverFamilyActions = (
       <br></br><br></br>
       <Button size="sm" type="showHideSubTable">Show businesses</Button>
       <br></br><br></br>
-      <Button type="update" size="sm" className="mr-1">Update</Button>
-      <br></br><br></br>
-      <Button type="delete" variant="danger" size="sm">Delete</Button>
+      <Actions />
     </Popover.Content>
   </Popover>
 );
