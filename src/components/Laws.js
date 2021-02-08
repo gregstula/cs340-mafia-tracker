@@ -16,19 +16,65 @@ var laws = [
     "id":1,
     "name":"Extortion",
     "sentence":"3 years",
-    "showLawBreakers":true
+    "showLawBreakers":true,
+    "lawBreakers": [
+      {
+        "fname":"Andrew",
+        "lname":"Douglas"
+      },
+      {
+        "fname":"Tony",
+        "lname":"Soprano"
+      }
+    ]
   },
   {
     "id":2,
     "name":"Fraud",
     "sentence":"10 years",
-    "showLawBreakers":true
+    "showLawBreakers":true,
+    "lawBreakers": [
+      {
+        "fname":"Andrew",
+        "lname":"Douglas"
+      },
+      {
+        "fname":"Tony",
+        "lname":"Soprano"
+      },
+      {
+        "fname":"Oliver",
+        "lname":"Twist"
+      }
+    ]
   },
   {
     "id":3,
     "name":"Tax Evasion",
     "sentence":"15 years",
-    "showLawBreakers":true
+    "showLawBreakers":true,
+    "lawBreakers": [
+      {
+        "fname":"Bill",
+        "lname":"Omerta"
+      },
+      {
+        "fname":"Joe",
+        "lname":"Alpha"
+      },
+      {
+        "fname":"Andrew",
+        "lname":"Douglas"
+      },
+      {
+        "fname":"Tony",
+        "lname":"Soprano"
+      },
+      {
+        "fname":"Oliver",
+        "lname":"Twist"
+      }
+    ]
   },
 ];
 
@@ -58,26 +104,12 @@ function Laws() {
       return (
         <tr>
           <td colSpan="5">
-            <IndividualSubTable>
-              <IndividualEntry fname="Andrew" lname="Douglas" role="Godfather" />
-              <IndividualEntry fname="Tony" lname="Soprano" role="Godfather" />
-            </IndividualSubTable>
+            <IndividualSubTable index={props.index}/>
           </td>
         </tr>
       );
     }
 
-
-    function IndividualEntry(props) {
-        return (
-              <tr>
-                <td>{props.fname}</td>
-                <td>{props.lname}</td>
-                <td>{props.role}</td>
-                <td><Button size="sm" variant="danger" type="delete">Delete</Button></td>
-              </tr>
-        );
-    }
 
     function IndividualSubTable(props) {
       return (
@@ -88,13 +120,20 @@ function Laws() {
               <tr>
                 <th>First Name</th>
                 <th>Last Name</th>
-                <th>Role</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-               {props.children}
-              </tbody>
+              {
+                laws[props.index].lawBreakers.map(person => (
+                  <tr>
+                    <td>{person.fname}</td>
+                    <td>{person.lname}</td>
+                    <td><Button size="sm" variant="danger" type="delete">Delete</Button></td>
+                  </tr>
+                ))
+              }
+            </tbody>
           </Table>
         </Container>
       );
@@ -163,14 +202,14 @@ function Laws() {
               </td>
             </tr>
 
-            <LawRow index="0" />
-            <LawRowBreakers index="0" />
-
-            <LawRow index="1" />
-            <LawRowBreakers index="1" />
-
-            <LawRow index="2" />
-            <LawRowBreakers index="2" />
+            {
+              laws.map((law, index) => (
+                <React.Fragment>
+                  <LawRow index={index} />
+                  <LawRowBreakers index={index} />
+                </React.Fragment>
+              ))
+            }
 
           </tbody>
         </Table>
