@@ -5,7 +5,7 @@ import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
 
-const data = [
+const businesses = [
   {
   "id": 1,
   "name":"Joe's Pizza",
@@ -54,15 +54,15 @@ function Businesses() {
     function BusinessRow(props) {
       return (
         <tr>
-        <td>{data[props.index].id}</td>
-        <td>{data[props.index].name}</td>
-        <td>{data[props.index].number}</td>
-        <td>{data[props.index].street}</td>
-        <td>{data[props.index].city}</td>
-        <td>{data[props.index].state}</td>
-        <td>{data[props.index].zip}</td>
-        <td>{data[props.index].owner}</td>
-        <td>{data[props.index].family}</td>
+        <td>{businesses[props.index].id}</td>
+        <td>{businesses[props.index].name}</td>
+        <td>{businesses[props.index].number}</td>
+        <td>{businesses[props.index].street}</td>
+        <td>{businesses[props.index].city}</td>
+        <td>{businesses[props.index].state}</td>
+        <td>{businesses[props.index].zip}</td>
+        <td>{businesses[props.index].owner}</td>
+        <td>{businesses[props.index].family}</td>
         <td>
           <DropDownBusinessActions/>
         </td>
@@ -134,7 +134,7 @@ function Businesses() {
               </td>
             </tr>
             {
-              data.map((business, index) => (
+              businesses.map((business, index) => (
                 <>
                   <BusinessRow index={index} />
                 </>

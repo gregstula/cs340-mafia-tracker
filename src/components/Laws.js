@@ -1,6 +1,5 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
-import Actions from './Actions'
 
 //import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 //import Popover from 'react-bootstrap/Popover'
