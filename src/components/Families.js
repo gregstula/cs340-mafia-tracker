@@ -1,6 +1,10 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
-import Actions from './Actions'
+//import Actions from './Actions'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover'
+import PopoverContent from 'react-bootstrap/PopoverContent'
+
 
 function Families() {
      return (
@@ -12,8 +16,6 @@ function Families() {
               <th>ID</th>
               <th>Name</th>
               <th># of members</th>
-              <th>Members</th>
-              <th>Businesses owned</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -21,15 +23,13 @@ function Families() {
           <tbody>
 
             <tr>
-                <td>Auto</td>
+                <td>Input new family</td>
               <td>
                 <Form>
                   <Form.Control size="lg" type="text" placeholder="Name" />
                 </Form>
               </td>
               <td>#</td>
-              <td></td>
-              <td></td>
               <td>
                 <Button size="sm" type="submit">Create</Button>
               </td>
@@ -39,9 +39,11 @@ function Families() {
               <th>1</th>
               <td>Omerta</td>
               <td>1</td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Actions /></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverFamilyActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
               <td colSpan="5"><IndividualSubTable fname="Bill" lname="Omerta" role="Godfather" /></td>
@@ -51,9 +53,11 @@ function Families() {
               <th>2</th>
               <td>Murphy</td>
               <td>5</td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Actions /></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverFamilyActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
               <td colSpan="5"><BusinessSubTable name="Domino's" streetAddress="54232 NW Road Blvd" city="Corvallis" state="Oregon"/></td>
@@ -63,9 +67,11 @@ function Families() {
               <th>3</th>
               <td>Scott</td>
               <td>2</td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Actions /></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverFamilyActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
               <td colSpan="5"><IndividualSubTable fname="Michael" lname="Scott" role="Regional Manager" /></td>
@@ -140,6 +146,20 @@ function IndividualSubTable(person) {
   );
 }
 
+
+const popoverFamilyActions = (
+  <Popover id="popover-basic">
+    <Popover.Content>
+      <Button size="sm" type="showHideSubTable">Show members</Button>
+      <br></br><br></br>
+      <Button size="sm" type="showHideSubTable">Show businesses</Button>
+      <br></br><br></br>
+      <Button type="update" size="sm" className="mr-1">Update</Button>
+      <br></br><br></br>
+      <Button type="delete" variant="danger" size="sm">Delete</Button>
+    </Popover.Content>
+  </Popover>
+);
 
 
 export default Families;

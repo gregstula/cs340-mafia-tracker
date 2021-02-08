@@ -1,6 +1,9 @@
 import {Container, Form, Button} from 'react-bootstrap';
-import Actions from './Actions';
+//import Actions from './Actions';
 import Table from 'react-bootstrap/Table';
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover'
+import PopoverContent from 'react-bootstrap/PopoverContent'
 
 function Businesses() {
      return (
@@ -18,6 +21,7 @@ function Businesses() {
               <th>State</th>
               <th>Zip</th>
               <th>Owner</th>
+              <th>Family</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -27,39 +31,40 @@ function Businesses() {
             <tr>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="ID" />
+                  <Form.Control size="sm" type="text" placeholder="ID" />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="Name" />
+                  <Form.Control size="sm" type="text" placeholder="Name" />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="Street" />
+                  <Form.Control size="sm" type="text" placeholder="Street" />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="City" />
+                  <Form.Control size="sm" type="text" placeholder="City" />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="State" />
+                  <Form.Control size="sm" type="text" placeholder="State" />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="State" />
+                  <Form.Control size="sm" type="text" placeholder="State" />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="m" type="text" placeholder="Zip" />
+                  <Form.Control size="sm" type="text" placeholder="Zip" />
                 </Form>
-            </td>
+              </td>
+              <td></td>
               <td></td>
               <td>
                 <Button size="sm" type="submit">Create</Button>
@@ -75,7 +80,12 @@ function Businesses() {
               <td>New York</td>
               <td>32212</td>
               <td>Tony Soprano</td>
-              <td><Actions /></td>
+              <td>Soprano</td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
               <td>2</td>
@@ -86,12 +96,28 @@ function Businesses() {
               <td>New York</td>
               <td>80192</td>
               <td>Elon Musk</td>
-              <td><Actions /></td>
+              <td></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
           </tbody>
         </Table>
       </Container>
   );
 }
+
+
+const popoverLawActions = (
+  <Popover id="popover-basic">
+    <Popover.Content>
+      <Button type="update" size="sm" className="mr-1">Update</Button>
+      <br></br><br></br>
+      <Button type="delete" variant="danger" size="sm">Delete</Button>
+    </Popover.Content>
+  </Popover>
+);
 
 export default Businesses;

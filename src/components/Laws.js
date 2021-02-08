@@ -1,6 +1,9 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
-import Actions from './Actions'
+//import Actions from './Actions'
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
+import Popover from 'react-bootstrap/Popover'
+import PopoverContent from 'react-bootstrap/PopoverContent'
 
 function Laws() {
      return (
@@ -12,7 +15,6 @@ function Laws() {
               <th>ID</th>
               <th>Name</th>
               <th>Sentence</th>
-              <th>Law Breakers</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -31,17 +33,20 @@ function Laws() {
                   <Form.Control size="lg" type="text" placeholder="Sentence" />
                 </Form>
               </td>
-              <td></td>
               <td>
                 <Button szie="sm" type="submit">Create</Button>
               </td>
             </tr>
+
             <tr>
               <td>1</td>
               <td>Extortion</td>
               <td>3 years</td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Actions /></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
             <td colSpan="5">
@@ -57,8 +62,11 @@ function Laws() {
               <td>2</td>
               <td>Fraud</td>
               <td>10 years</td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Actions /></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
                 <td colSpan="5">
@@ -74,8 +82,11 @@ function Laws() {
               <td>3</td>
               <td>Tax Evasion</td>
               <td>15 years</td>
-              <td><Button size="sm" type="showHideSubTable">Show</Button></td>
-              <td><Actions /></td>
+              <td>
+                <OverlayTrigger trigger="click" placement="left" overlay={popoverLawActions}>
+                  <Button size="sm" type="actionsButton">Actions</Button>
+                </OverlayTrigger>
+              </td>
             </tr>
             <tr>
                 <td colSpan="5">
@@ -128,5 +139,17 @@ function IndividualSubTable(props) {
 }
 
 
-export default Laws;
+const popoverLawActions = (
+  <Popover id="popover-basic">
+    <Popover.Content>
+      <Button size="sm" type="showHideSubTable">Show law breakers</Button>
+      <br></br><br></br>
+      <Button type="update" size="sm" className="mr-1">Update</Button>
+      <br></br><br></br>
+      <Button type="delete" variant="danger" size="sm">Delete</Button>
+    </Popover.Content>
+  </Popover>
+);
 
+
+export default Laws;
