@@ -57,6 +57,7 @@ function Businesses() {
         <td>{data[props.index].city}</td>
         <td>{data[props.index].state}</td>
         <td>{data[props.index].zip}</td>
+        <td>{data[props.index].state}</td>
         <td>{data[props.index].owner}</td>
         <td>{data[props.index].family}</td>
         <td>
