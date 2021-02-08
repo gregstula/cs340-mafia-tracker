@@ -13,12 +13,12 @@ var families = [
       {
         "fname": "Bill",
         "lname": "Omerta",
-        "Role": "Godfather"
+        "role": "Godfather"
       },
       {
         "fname": "Matthew",
         "lname": "Omerta",
-        "Role": "Captain"
+        "role": "Captain"
       }
     ],
     "businesses": [
@@ -40,32 +40,32 @@ var families = [
       {
         "fname": "Brian",
         "lname": "Murphy",
-        "Role": "Godfather"
+        "role": "Godfather"
       },
       {
         "fname": "John",
         "lname": "Murphy",
-        "Role": "Captain"
+        "role": "Captain"
       },
       {
         "fname": "Phil",
         "lname": "Murphy",
-        "Role": "Captain"
+        "role": "Captain"
       },
       {
         "fname": "Frank",
         "lname": "Murphy",
-        "Role": "Captain"
+        "role": "Captain"
       },
       {
         "fname": "Alex",
         "lname": "Murphy",
-        "Role": "Captain"
+        "role": "Captain"
       },
       {
         "fname": "Edgar",
         "lname": "Murphy",
-        "Role": "Captain"
+        "role": "Captain"
       }
     ],
     "businesses": [
@@ -93,12 +93,12 @@ var families = [
       {
         "fname": "Michael",
         "lname": "Scott",
-        "Role": "Regional Manager"
+        "role": "Regional Manager"
       },
       {
         "fname": "Dwight",
         "lname": "Shrewt",
-        "Role": "Assistant to the Regional Manager"
+        "role": "Assistant to the Regional Manager"
       }
     ],
     "businesses": [
