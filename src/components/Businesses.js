@@ -10,16 +10,18 @@ const data = [
   "id": 1,
   "name":"Joe's Pizza",
   "number": 320,
+  "street": "Main St",
   "city": "New York",
   "state": "New York",
   "zip" : 32212,
   "owner": "Tony Soprano",
-  "Family": "Soprano"
+  "family": "Soprano"
   },
   {
     "id": 2,
     "name":"Maria's Coin Laundry",
     "number": 210,
+    "street": "Wall St",
     "city": "New York",
     "state": "New York",
     "zip" : 80192,
@@ -31,6 +33,7 @@ const data = [
     "name":"Dunder Mifflin",
     "number": 4120,
     "city": "Scranton",
+    "street": "22nd St",
     "state": "Pennsylvania",
     "zip" : 54292,
     "owner": "Michael Scott",
@@ -54,10 +57,10 @@ function Businesses() {
         <td>{data[props.index].id}</td>
         <td>{data[props.index].name}</td>
         <td>{data[props.index].number}</td>
+        <td>{data[props.index].street}</td>
         <td>{data[props.index].city}</td>
         <td>{data[props.index].state}</td>
         <td>{data[props.index].zip}</td>
-        <td>{data[props.index].state}</td>
         <td>{data[props.index].owner}</td>
         <td>{data[props.index].family}</td>
         <td>
