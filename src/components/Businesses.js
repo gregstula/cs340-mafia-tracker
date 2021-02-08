@@ -130,7 +130,7 @@ function Businesses() {
               <td></td>
               <td></td>
               <td>
-                <Button size="sm" type="submit">Create</Button>
+                <Button type="submit">Create</Button>
               </td>
             </tr>
             {
