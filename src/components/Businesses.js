@@ -2,10 +2,69 @@ import {Container, Form, Button} from 'react-bootstrap';
 import Actions from './Actions';
 import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-import Popover from 'react-bootstrap/Popover'
-import PopoverContent from 'react-bootstrap/PopoverContent'
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from 'react-bootstrap/DropdownButton';
+
+const data = [
+  {
+  "id": 1,
+  "name":"Joe's Pizza",
+  "number": 320,
+  "city": "New York",
+  "state": "New York",
+  "zip" : 32212,
+  "owner": "Tony Soprano",
+  "Family": "Soprano"
+  },
+  {
+    "id": 2,
+    "name":"Maria's Coin Laundry",
+    "number": 210,
+    "city": "New York",
+    "state": "New York",
+    "zip" : 80192,
+    "owner": "Elon Musk",
+    "family": "Musk"
+  },
+  {
+    "id": 3,
+    "name":"Dunder Mifflin",
+    "number": 4120,
+    "city": "Scranton",
+    "state": "Pennsylvania",
+    "zip" : 54292,
+    "owner": "Michael Scott",
+    "family": "Scott"
+  }
+]
 
 function Businesses() {
+
+  function DropDownBusinessActions (props) {
+    return (
+      <DropdownButton id="dropdown-item-button" title="Actions">
+        <Dropdown.Item as="button">Update</Dropdown.Item>
+        <Dropdown.Item as="button">Delete</Dropdown.Item>
+      </DropdownButton>
+    );
+  }
+    function BusinessRow(props) {
+      return (
+        <tr>
+        <td>{data[props.index].id}</td>
+        <td>{data[props.index].name}</td>
+        <td>{data[props.index].number}</td>
+        <td>{data[props.index].city}</td>
+        <td>{data[props.index].state}</td>
+        <td>{data[props.index].zip}</td>
+        <td>{data[props.index].owner}</td>
+        <td>{data[props.index].family}</td>
+        <td>
+          <DropDownBusinessActions/>
+        </td>
+      </tr>
+      );
+    }
      return (
       <Container fluid>
         <h1>Businesses</h1>
@@ -70,53 +129,17 @@ function Businesses() {
                 <Button size="sm" type="submit">Create</Button>
               </td>
             </tr>
-
-            <tr>
-              <td>1</td>
-              <td>Joe's Pizza</td>
-              <td>320</td>
-              <td>Main St.</td>
-              <td>New York</td>
-              <td>New York</td>
-              <td>32212</td>
-              <td>Tony Soprano</td>
-              <td>Soprano</td>
-              <td>
-                <OverlayTrigger trigger="click" placement="left" overlay={popoverBaseActions}>
-                  <Button size="sm" type="actionsButton">Actions</Button>
-                </OverlayTrigger>
-              </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Maria's Coin Laundry</td>
-              <td>210</td>
-              <td>Wall St.</td>
-              <td>New York</td>
-              <td>New York</td>
-              <td>80192</td>
-              <td>Elon Musk</td>
-              <td></td>
-              <td>
-                <OverlayTrigger trigger="click" placement="left" overlay={popoverBaseActions}>
-                  <Button size="sm" type="actionsButton">Actions</Button>
-                </OverlayTrigger>
-              </td>
-            </tr>
+            {
+              data.map((business, index) => (
+                <>
+                  <BusinessRow index={index} />
+                </>
+              ))
+            }
           </tbody>
         </Table>
       </Container>
   );
 }
-
-
-const popoverBaseActions = (
-  <Popover id="popover-basic">
-    <Popover.Content>
-      <Actions />
-    </Popover.Content>
-  </Popover>
-);
-
 
 export default Businesses;

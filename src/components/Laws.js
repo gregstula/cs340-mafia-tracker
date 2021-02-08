@@ -142,7 +142,7 @@ function Laws() {
 
     function DropDownLawActions (props) {
       return (
-        <DropdownButton id="dropdown-item-button" title="Dropdown button">
+        <DropdownButton id="dropdown-item-button" title="Actions">
           <Dropdown.Item as="button" onClick={() => ShowLawBreakersSubTable(props.index)}>Show law breakers</Dropdown.Item>
           <Dropdown.Item as="button">Update</Dropdown.Item>
           <Dropdown.Item as="button">Delete</Dropdown.Item>
