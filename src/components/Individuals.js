@@ -1,5 +1,5 @@
 //
-import {Container, Form, Button} from 'react-bootstrap';
+import {Container, Form, Row, Col, Button} from 'react-bootstrap';
 import Actions from './Actions';
 import Table from 'react-bootstrap/Table';
 
@@ -165,6 +165,9 @@ function Individuals() {
                   }
                 </tbody>
               </Table>
+              <Form>
+                <Form.Control size="m" type="text" placeholder="Search for existing law to add to add to this person's list of broken laws" />
+              </Form>
         </td>
       </tr>
     );
@@ -208,6 +211,9 @@ function Individuals() {
                   }
                 </tbody>
               </Table>
+              <Form>
+                <Form.Control size="m" type="text" placeholder="Search for existing business to add to businesses owned by this person" />
+              </Form>
         </td>
       </tr>
     );
@@ -242,9 +248,16 @@ function Individuals() {
       <h1>Individuals</h1>
 
       <Form>
-        <Form.Control size="m" type="text" placeholder="Search" />
+        <Form.Row>
+          <Col>
+            <Form.Control size="m" type="text" placeholder="Search" />
+          </Col>
+          <Col>
+            <Button type="search">Search</Button>
+          </Col>
+        </Form.Row>
       </Form>
-      <Button type="search">Search</Button>
+
       <p></p>
 
       <Table bordered hover>

@@ -130,6 +130,9 @@ function Laws() {
               }
             </tbody>
           </Table>
+          <Form>
+            <Form.Control size="m" type="text" placeholder="Search for existing person to add to the list of people that have broken this law" />
+          </Form>
         </Container>
       );
     }

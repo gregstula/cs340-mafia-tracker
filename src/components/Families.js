@@ -1,4 +1,4 @@
-import {Container, Form, Button} from 'react-bootstrap';
+import {Container, Form, Row, Col, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table';
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
@@ -134,8 +134,8 @@ function Families() {
         </tr>
     );
   }
-  
-  
+
+
   function DropDownFamilyActions (props) {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
@@ -207,6 +207,9 @@ function Families() {
             }
           </tbody>
         </Table>
+        <Form>
+          <Form.Control size="m" type="text" placeholder="Search for existing member to add to family" />
+        </Form>
       </Container>
     );
   }
@@ -240,6 +243,9 @@ function Families() {
             }
           </tbody>
         </Table>
+        <Form>
+          <Form.Control size="m" type="text" placeholder="Search for existing business to add to businesses owned by this family" />
+        </Form>
       </Container>
     );
   }
