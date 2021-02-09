@@ -1,10 +1,6 @@
 import {Container, Form, Button} from 'react-bootstrap';
 import Table from 'react-bootstrap/Table'
 
-//import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
-//import Popover from 'react-bootstrap/Popover'
-//import PopoverContent from 'react-bootstrap/PopoverContent'
-
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
 
@@ -15,7 +11,7 @@ var laws = [
     "id":1,
     "name":"Extortion",
     "sentence":"3 years",
-    "showLawBreakers":true,
+    "showLawBreakers":false,
     "lawBreakers": [
       {
         "fname":"Andrew",
@@ -31,7 +27,7 @@ var laws = [
     "id":2,
     "name":"Fraud",
     "sentence":"10 years",
-    "showLawBreakers":true,
+    "showLawBreakers":false,
     "lawBreakers": [
       {
         "fname":"Andrew",
@@ -51,7 +47,7 @@ var laws = [
     "id":3,
     "name":"Tax Evasion",
     "sentence":"15 years",
-    "showLawBreakers":true,
+    "showLawBreakers":false,
     "lawBreakers": [
       {
         "fname":"Bill",
