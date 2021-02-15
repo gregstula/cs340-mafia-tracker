@@ -30,7 +30,8 @@ var families = [
       }
     ],
     "showMembers": false,
-    "showBusinesses": false
+    "showBusinesses": false,
+    "editMode":false
   },
   {
     "id": 2,
@@ -83,7 +84,8 @@ var families = [
       }
     ],
     "showMembers": false,
-    "showBusinesses": false
+    "showBusinesses": false,
+    "editMode":false
   },
   {
     "id": 3,
@@ -110,7 +112,8 @@ var families = [
       }
     ],
     "showMembers": false,
-    "showBusinesses": false
+    "showBusinesses": false,
+    "editMode":false
   }
 ]
 
@@ -121,18 +124,33 @@ function Families() {
 
   const [membersShown, setMembersShown] = useState(false);
   const [businessesShown, setBusinessesShown] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   function FamilyRow(props) {
-    return (
+    if(families[props.index].editMode)
+      return(
         <tr>
           <td>{families[props.index].id}</td>
-          <td>{families[props.index].name}</td>
-          <td>{families[props.index].memberCount}</td>
           <td>
-            <DropDownFamilyActions index={props.index}/>
+            <Form>
+              <Form.Control size="m" type="text" value={families[props.index].name} />
+            </Form>
           </td>
+          <td>#</td>
+          <td><Button type="submit" onClick={() => toggleEditMode(props.index)}>Submit</Button></td>
         </tr>
-    );
+      );
+    else
+      return (
+          <tr>
+            <td>{families[props.index].id}</td>
+            <td>{families[props.index].name}</td>
+            <td>{families[props.index].memberCount}</td>
+            <td>
+              <DropDownFamilyActions index={props.index}/>
+            </td>
+          </tr>
+      );
   }
 
 
@@ -141,7 +159,7 @@ function Families() {
       <DropdownButton id="dropdown-item-button" title="Actions">
         <Dropdown.Item as="button" onClick={() => ShowMembersSubTable(props.index)}>Show Members</Dropdown.Item>
         <Dropdown.Item as="button" onClick={() => ShowBusinessSubTable(props.index)}>Show Businesses</Dropdown.Item>
-        <Dropdown.Item as="button">Update</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => toggleEditMode(props.index)}>Update</Dropdown.Item>
         <Dropdown.Item as="button">Delete</Dropdown.Item>
       </DropdownButton>
     );
@@ -214,7 +232,6 @@ function Families() {
     );
   }
 
-
   function BusinessSubTable(props) {
     return (
       <Container>
@@ -250,45 +267,50 @@ function Families() {
     );
   }
 
-     return (
-      <Container fluid>
-      <h1>Families</h1>
-        <Table bordered hover>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Name</th>
-              <th># of members</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+  function toggleEditMode(index) {
+    families[index].editMode = !families[index].editMode;
+    setEditMode(!editMode);
+  }
 
-          <tbody>
+  return (
+    <Container fluid>
+    <h1>Families</h1>
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th># of members</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-            <tr>
-                <td>Input new family</td>
-              <td>
-                <Form>
-                  <Form.Control size="lg" type="text" placeholder="Name" />
-                </Form>
-              </td>
-              <td>#</td>
-              <td>
-                <Button type="submit">Create</Button>
-              </td>
-            </tr>
-            {
-              families.map((family, index) => (
-                <>
-                  <FamilyRow index={index} />
-                  <MembersToggle index={index} />
-                  <BusinessesToggle index={index} />
-                </>
-              ))
-            }
-          </tbody>
-        </Table>
-      </Container>
+        <tbody>
+
+          <tr>
+              <td>Input new family</td>
+            <td>
+              <Form>
+                <Form.Control size="lg" type="text" placeholder="Name" />
+              </Form>
+            </td>
+            <td>#</td>
+            <td>
+              <Button type="submit">Create</Button>
+            </td>
+          </tr>
+          {
+            families.map((family, index) => (
+              <>
+                <FamilyRow index={index} />
+                <MembersToggle index={index} />
+                <BusinessesToggle index={index} />
+              </>
+            ))
+          }
+        </tbody>
+      </Table>
+    </Container>
   );
 }
 
