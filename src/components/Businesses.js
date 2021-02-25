@@ -50,7 +50,7 @@ function Businesses() {
   const [streetInput, setStreet] = useState("");
   const [cityInput, setCity] = useState("");
   const [stateInput, setState] = useState("");
-  const [zipInput, setzip] = useState(0);
+  const [zipInput, setZip] = useState(0);
 
   const [businessList, setBusinessList] = useState([]);
 
@@ -135,32 +135,32 @@ function Businesses() {
               </td>
               <td>
                 <Form>
-                  <Form.Control size="sm" type="text" placeholder="Name" />
+                  <Form.Control size="sm" type="text" placeholder="Name" onChange={(event) => { setBusinessName(event.target.value); }} />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="sm" type="text" placeholder="Street" />
+                  <Form.Control size="sm" type="text" placeholder="Building Number" onChange={(event) => { setBuildingNumber(event.target.value); }} />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="sm" type="text" placeholder="City" />
+                  <Form.Control size="sm" type="text" placeholder="Street" onChange={(event) => { setStreet(event.target.value); }} />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="sm" type="text" placeholder="State" />
+                  <Form.Control size="sm" type="text" placeholder="City" onChange={(event) => { setCity(event.target.value); }} />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="sm" type="text" placeholder="State" />
+                  <Form.Control size="sm" type="text" placeholder="State" onChange={(event) => { setState(event.target.value); }} />
                 </Form>
               </td>
               <td>
                 <Form>
-                  <Form.Control size="sm" type="text" placeholder="Zip" />
+                  <Form.Control size="sm" type="text" placeholder="Zip" onChange={(event) => { setZip(event.target.value); }} />
                 </Form>
               </td>
               <td></td>
