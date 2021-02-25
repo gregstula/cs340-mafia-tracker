@@ -93,9 +93,7 @@ function Businesses() {
 
             <tr>
               <td>
-                <Form>
-                  <Form.Control size="sm" type="text" placeholder="ID" />
-                </Form>
+                  Auto
               </td>
               <td>
                 <Form>
