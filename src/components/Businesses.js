@@ -172,14 +172,14 @@ function Businesses() {
             {
               businesses.map((business, index) => (
                 <>
-                  <BusinessRow index={index} sourceArray={businesses}/>
+                  <BusinessRow key= {index} index={index} sourceArray={businesses}/>
                 </>
               ))
             }
             {
               businessList.map((business, index) => (
                 <>
-                  <BusinessRow index={index} sourceArray={businessList}/>
+                  <BusinessRow key={index} index={index} sourceArray={businessList}/>
                 </>
               ))
             }
