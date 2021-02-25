@@ -57,8 +57,9 @@ function Businesses() {
   const addBusiness = () => {
     console.log("businessNameInput = " + businessNameInput);
 
-    //const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
-     const createUrl = "http://localhost:8000/businesses/create"
+    const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
+    //const createUrl = "http://localhost:8000/businesses/create";
+
     Axios.post(createUrl, {
       businessNameInput: businessNameInput,
       buildingNumberInput: buildingNumberInput,
