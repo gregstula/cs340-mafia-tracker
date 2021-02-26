@@ -4,9 +4,11 @@ import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
+import Modal from 'react-bootstrap/Modal';
 import {Fragment, useEffect, useState } from "react";
 import Axios from "axios";
 import axios from 'axios';
+import DropdownItem from 'react-bootstrap/esm/DropdownItem';
 
 
 function Businesses() {
@@ -56,11 +58,48 @@ function Businesses() {
   function DropDownBusinessActions (props) {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
-        <Dropdown.Item as="button">Update</Dropdown.Item>
+        <Dropdown.Item as={Example}></Dropdown.Item>
         <Dropdown.Item as="button" onClick={() => deleteBusiness(props.ID)}>Delete</Dropdown.Item>
       </DropdownButton>
     );
   }
+
+  function Example() {
+    const [show, setShow] = useState(false);
+  
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+  
+    return (
+      <>
+        <Dropdown.Item as='button'  onClick={handleShow}>
+          Update
+        </Dropdown.Item>
+  
+        <Modal
+          show={show}
+          onHide={handleClose}
+          backdrop="static"
+          keyboard={false}
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>Modal title</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            This will be the Modal pop up with the edit form!
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+            <Button variant="primary">Understood</Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
+  }
+  
+
     function BusinessRow(props) {
       const ID = businessList[props.index].businessID
       return (
