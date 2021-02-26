@@ -25,7 +25,7 @@ function Businesses() {
   
   useEffect(() => {
       axios.get(getUrl).then(response => setBusinessList(response.data));
-  }, []);
+  }, [businessList]);
 
   const addBusiness = () => {
 
@@ -40,17 +40,7 @@ function Businesses() {
       stateInput: stateInput,
       zipInput: zipInput,
     }).then(() => {
-      setBusinessList([
-        ...businessList,
-        {
-          businessNameInput: businessNameInput,
-          buildingNumberInput: buildingNumberInput,
-          streetInput: streetInput,
-          cityInput: cityInput,
-          stateInput: stateInput,
-          zipInput: zipInput,
-        },
-      ]);
+      setBusinessList([]);
     });
   };
 
@@ -68,8 +58,8 @@ function Businesses() {
       return (
         <tr>
         <td>{props.sourceArray[props.index].businessID}</td>
+        <td>{props.sourceArray[props.index].businessName}</td>
         <td>{props.sourceArray[props.index].buildingNumber}</td>
-        <td>{props.sourceArray[props.index].number}</td>
         <td>{props.sourceArray[props.index].streetName}</td>
         <td>{props.sourceArray[props.index].city}</td>
         <td>{props.sourceArray[props.index].state}</td>
