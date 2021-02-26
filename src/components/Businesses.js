@@ -10,19 +10,25 @@ import { Fragment, useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import axios from 'axios';
 
-
+// Component for business form
+// Much more effecient at handling state and saving render calls
+// Can also be used in Update Component
 class BusinessForm extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { ...this.props.data };
   }
   // Form validation used to clear form on submit
   // https://github.com/react-bootstrap/react-bootstrap/issues/3730
 
   // just resets the form input on submit
   handleSubmit = (onClick) => {
-    onClick(this.state);
+    if (this.state.businessID) {
+      onClick(this.state.businessID, this.state)
+    } else {
+      onClick(this.state);
+    }
   }
 
   handleOnChange = (e) => {
@@ -37,21 +43,21 @@ class BusinessForm extends React.Component {
           <Form.Row>
             <Form.Group as={Col}>
               <Form.Control size="sm" type="text" placeholder="Name" name="businessName" value={this.state.businessName} onChange={this.handleOnChange} />
-        </Form.Group>
-            <Form.Group as={Col}>
-              <Form.Control size="sm" type="text" placeholder="Building Number" name="buildingNumber" onChange={this.handleOnChange} />
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Control size="sm" type="text" placeholder="Street" name="street" onChange={this.handleOnChange} />
+              <Form.Control size="sm" type="text" placeholder="Building Number" name="buildingNumber" value={this.state.buildingNumber} onChange={this.handleOnChange} />
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Control size="sm" type="text" placeholder="City" name="city" onChange={this.handleOnChange} />
+              <Form.Control size="sm" type="text" placeholder="Street" name="streetName" value={this.state.streetName} onChange={this.handleOnChange} />
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Control size="sm" type="text" placeholder="State" name="state" onChange={this.handleOnChange} />
+              <Form.Control size="sm" type="text" placeholder="City" name="city" value={this.state.city} onChange={this.handleOnChange} />
             </Form.Group>
             <Form.Group as={Col}>
-              <Form.Control size="sm" type="text" placeholder="Zip" name="zip" onChange={this.handleOnChange} />
+              <Form.Control size="sm" type="text" placeholder="State" name="state" value={this.state.state} onChange={this.handleOnChange} />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control size="sm" type="text" placeholder="Zip" name="zip" value={this.state.zip} onChange={this.handleOnChange} />
             </Form.Group>
             <Form.Group as={Col}>
               <Button type="submit" onClick={() => this.handleSubmit(this.props.onClick)}>{this.props.type}</Button>
@@ -69,7 +75,6 @@ function Businesses() {
   const [tableView, setTableView] = useState([]);
 
 
-
   const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
   //const getUrl = 'http://localhost:8000/businesses/';
 
@@ -83,14 +88,7 @@ function Businesses() {
   const addBusiness = (input) => {
     const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
     //const createUrl = "http://localhost:8000/businesses/create";
-    Axios.post(createUrl, {
-      businessNameInput: input.businessName,
-      buildingNumberInput: input.buildingNumber,
-      streetInput: input.street,
-      cityInput: input.city,
-      stateInput: input.state,
-      zipInput: input.zip,
-    }).then(() => {
+    Axios.post(createUrl, input).then(() => {
       setTableView([]); // does nothing but forces a reRerender
     });
   };
@@ -105,8 +103,10 @@ function Businesses() {
 
 
   // update handler
-  const updateBusiness = (id) => {
-    console.log();
+  const updateBusiness = (id, input) => {
+    const updateUrl = `https://cs340-mafia-server.herokuapp.com/businesses/update/${id}`;
+    //const updateUrl = `http://localhost:8000/businesses/update/${id}`;
+    axios.put(updateUrl, input ).then(response => setTableView([]));
   };
 
   function DropDownBusinessActions(props) {
@@ -142,7 +142,7 @@ function Businesses() {
             <Modal.Title>Update {props.business.businessName} ID: {props.business.businessID}</Modal.Title>
           </Modal.Header>
           <Modal.Body>
-            <BusinessForm type="Update" />
+            <BusinessForm type="Update" onClick={updateBusiness} data={props.business} />
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -156,20 +156,19 @@ function Businesses() {
 
 
   function BusinessRow(props) {
-    const business = businessList[props.index]
     return (
       <tr>
-        <td>{businessList[props.index].businessID}</td>
-        <td>{businessList[props.index].businessName}</td>
-        <td>{businessList[props.index].buildingNumber}</td>
-        <td>{businessList[props.index].streetName}</td>
-        <td>{businessList[props.index].city}</td>
-        <td>{businessList[props.index].state}</td>
-        <td>{businessList[props.index].zip}</td>
-        <td>{businessList[props.index].individualOwner}</td>
-        <td>{businessList[props.index].familyOwner}</td>
+        <td>{props.business.businessID}</td>
+        <td>{props.business.businessName}</td>
+        <td>{props.business.buildingNumber}</td>
+        <td>{props.business.streetName}</td>
+        <td>{props.business.city}</td>
+        <td>{props.business.state}</td>
+        <td>{props.business.zip}</td>
+        <td>{props.business.individualOwner}</td>
+        <td>{props.business.familyOwner}</td>
         <td>
-          <DropDownBusinessActions business={business} />
+          <DropDownBusinessActions business={props.business} />
         </td>
       </tr>
     );
@@ -200,7 +199,7 @@ function Businesses() {
           {
             businessList.map((business, index) => (
               <Fragment key={business.businessID}>
-                <BusinessRow index={index} />
+                <BusinessRow business={business} />
               </Fragment>
             ))
           }
