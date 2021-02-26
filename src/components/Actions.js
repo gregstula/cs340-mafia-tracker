@@ -1,6 +1,5 @@
 import {Container, Button} from 'react-bootstrap';
-import Popover from 'react-bootstrap/Popover'
-import PopoverContent from 'react-bootstrap/PopoverContent'
+
 
 function Actions() {
     return (
