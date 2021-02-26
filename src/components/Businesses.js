@@ -4,44 +4,10 @@ import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Axios from "axios";
+import axios from 'axios';
 
-const businesses = [
-  {
-  "id": 1,
-  "name":"Joe's Pizza",
-  "number": 320,
-  "street": "Main St",
-  "city": "New York",
-  "state": "New York",
-  "zip" : 32212,
-  "owner": "Tony Soprano",
-  "family": "Soprano"
-  },
-  {
-    "id": 2,
-    "name":"Maria's Coin Laundry",
-    "number": 210,
-    "street": "Wall St",
-    "city": "New York",
-    "state": "New York",
-    "zip" : 80192,
-    "owner": "Elon Musk",
-    "family": "Musk"
-  },
-  {
-    "id": 3,
-    "name":"Dunder Mifflin",
-    "number": 4120,
-    "city": "Scranton",
-    "street": "22nd St",
-    "state": "Pennsylvania",
-    "zip" : 54292,
-    "owner": "Michael Scott",
-    "family": "Scott"
-  }
-]
 
 function Businesses() {
 
@@ -54,11 +20,17 @@ function Businesses() {
 
   const [businessList, setBusinessList] = useState([]);
 
-  const addBusiness = () => {
-    console.log("businessNameInput = " + businessNameInput);
+  //const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
+  const getUrl = 'http://localhost:8000/businesses/';
+  
+  useEffect(() => {
+      axios.get(getUrl).then(response => setBusinessList(response.data));
+  }, []);
 
-    const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
-    //const createUrl = "http://localhost:8000/businesses/create";
+  const addBusiness = () => {
+
+    //const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
+    const createUrl = "http://localhost:8000/businesses/create";
 
     Axios.post(createUrl, {
       businessNameInput: businessNameInput,
@@ -95,15 +67,15 @@ function Businesses() {
     function BusinessRow(props) {
       return (
         <tr>
-        <td>{props.sourceArray[props.index].id}</td>
-        <td>{props.sourceArray[props.index].name}</td>
+        <td>{props.sourceArray[props.index].businessID}</td>
+        <td>{props.sourceArray[props.index].buildingNumber}</td>
         <td>{props.sourceArray[props.index].number}</td>
-        <td>{props.sourceArray[props.index].street}</td>
+        <td>{props.sourceArray[props.index].streetName}</td>
         <td>{props.sourceArray[props.index].city}</td>
         <td>{props.sourceArray[props.index].state}</td>
         <td>{props.sourceArray[props.index].zip}</td>
-        <td>{props.sourceArray[props.index].owner}</td>
-        <td>{props.sourceArray[props.index].family}</td>
+        <td>{props.sourceArray[props.index].individualOwner}</td>
+        <td>{props.sourceArray[props.index].familyOwner}</td>
         <td>
           <DropDownBusinessActions/>
         </td>
@@ -173,16 +145,9 @@ function Businesses() {
               </td>
             </tr>
             {
-              businesses.map((business, index) => (
-                <>
-                  <BusinessRow key= {index} index={index} sourceArray={businesses}/>
-                </>
-              ))
-            }
-            {
               businessList.map((business, index) => (
                 <>
-                  <BusinessRow key={index} index={index} sourceArray={businessList}/>
+                  <BusinessRow key= {index} index={index} sourceArray={businessList}/>
                 </>
               ))
             }
