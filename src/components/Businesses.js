@@ -4,7 +4,7 @@ import Table from 'react-bootstrap/Table';
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger'
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from 'react-bootstrap/DropdownButton';
-import { useEffect, useState } from "react";
+import {Fragment, useEffect, useState } from "react";
 import Axios from "axios";
 import axios from 'axios';
 
@@ -44,10 +44,10 @@ function Businesses() {
     });
   };
 
-  const deleteBusiness = (index) => {
-    const deleteUrl = `https://cs340-mafia-server.herokuapp.com/businesses/delete/${businessList[index].businessID}`
+  const deleteBusiness = (ID) => {
+    const deleteUrl = `https://cs340-mafia-server.herokuapp.com/businesses/delete/${ID}`
     Axios.delete(deleteUrl).then((response) => {
-      setBusinessList( businessList.splice(index, 1) );
+      setCreate([]);
     });
   };
 
@@ -57,11 +57,12 @@ function Businesses() {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
         <Dropdown.Item as="button">Update</Dropdown.Item>
-        <Dropdown.Item as="button" onClick={() => deleteBusiness(props.index)}>Delete</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => deleteBusiness(props.ID)}>Delete</Dropdown.Item>
       </DropdownButton>
     );
   }
     function BusinessRow(props) {
+      const ID = businessList[props.index].businessID
       return (
         <tr>
         <td>{businessList[props.index].businessID}</td>
@@ -74,7 +75,7 @@ function Businesses() {
         <td>{businessList[props.index].individualOwner}</td>
         <td>{businessList[props.index].familyOwner}</td>
         <td>
-          <DropDownBusinessActions/>
+          <DropDownBusinessActions key={ID} ID={ID} />
         </td>
       </tr>
       );
@@ -143,9 +144,9 @@ function Businesses() {
             </tr>
             {
               businessList.map((business, index) => (
-                <>
-                  <BusinessRow key={index} index={index}/>
-                </>
+                <Fragment key ={business.businessID}>
+                  <BusinessRow index={index}/>
+                </Fragment>
               ))
             }
           </tbody>
