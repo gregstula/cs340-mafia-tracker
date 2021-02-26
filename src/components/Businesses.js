@@ -20,8 +20,8 @@ function Businesses() {
 
   const [businessList, setBusinessList] = useState([]);
 
-  //const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
-  const getUrl = 'http://localhost:8000/businesses/';
+  const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
+  //const getUrl = 'http://localhost:8000/businesses/';
   
   useEffect(() => {
       axios.get(getUrl).then(response => setBusinessList(response.data));
@@ -29,8 +29,8 @@ function Businesses() {
 
   const addBusiness = () => {
 
-    //const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
-    const createUrl = "http://localhost:8000/businesses/create";
+    const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
+    //const createUrl = "http://localhost:8000/businesses/create";
 
     Axios.post(createUrl, {
       businessNameInput: businessNameInput,
