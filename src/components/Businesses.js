@@ -22,16 +22,15 @@ function Businesses() {
 
   const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
   //const getUrl = 'http://localhost:8000/businesses/';
-  
+
   useEffect(() => {
       axios.get(getUrl).then(response => setBusinessList(response.data));
   }, [businessList]);
 
-  const addBusiness = () => {
 
+  const addBusiness = () => {
     const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
     //const createUrl = "http://localhost:8000/businesses/create";
-
     Axios.post(createUrl, {
       businessNameInput: businessNameInput,
       buildingNumberInput: buildingNumberInput,
@@ -44,28 +43,35 @@ function Businesses() {
     });
   };
 
+  const deleteBusiness = (index) => {
+    const deleteUrl = `https://cs340-mafia-server.herokuapp.com/businesses/delete/${businessList[index].businessID}`
+    Axios.delete(deleteUrl).then((response) => {
+      setBusinessList( businessList.splice(index, 1) );
+    });
+  };
+
 
 
   function DropDownBusinessActions (props) {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
         <Dropdown.Item as="button">Update</Dropdown.Item>
-        <Dropdown.Item as="button">Delete</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => deleteBusiness(props.index)}>Delete</Dropdown.Item>
       </DropdownButton>
     );
   }
     function BusinessRow(props) {
       return (
         <tr>
-        <td>{props.sourceArray[props.index].businessID}</td>
-        <td>{props.sourceArray[props.index].businessName}</td>
-        <td>{props.sourceArray[props.index].buildingNumber}</td>
-        <td>{props.sourceArray[props.index].streetName}</td>
-        <td>{props.sourceArray[props.index].city}</td>
-        <td>{props.sourceArray[props.index].state}</td>
-        <td>{props.sourceArray[props.index].zip}</td>
-        <td>{props.sourceArray[props.index].individualOwner}</td>
-        <td>{props.sourceArray[props.index].familyOwner}</td>
+        <td>{businessList[props.index].businessID}</td>
+        <td>{businessList[props.index].businessName}</td>
+        <td>{businessList[props.index].buildingNumber}</td>
+        <td>{businessList[props.index].streetName}</td>
+        <td>{businessList[props.index].city}</td>
+        <td>{businessList[props.index].state}</td>
+        <td>{businessList[props.index].zip}</td>
+        <td>{businessList[props.index].individualOwner}</td>
+        <td>{businessList[props.index].familyOwner}</td>
         <td>
           <DropDownBusinessActions/>
         </td>
@@ -137,7 +143,7 @@ function Businesses() {
             {
               businessList.map((business, index) => (
                 <>
-                  <BusinessRow key= {index} index={index} sourceArray={businessList}/>
+                  <BusinessRow key={index} index={index}/>
                 </>
               ))
             }
