@@ -19,13 +19,14 @@ function Businesses() {
   const [zipInput, setZip] = useState(0);
 
   const [businessList, setBusinessList] = useState([]);
+  const [create, setCreate] = useState([]);
 
   const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
   //const getUrl = 'http://localhost:8000/businesses/';
   
   useEffect(() => {
       axios.get(getUrl).then(response => setBusinessList(response.data));
-  }, [businessList]);
+  }, [create]);
 
   const addBusiness = () => {
 
@@ -40,7 +41,7 @@ function Businesses() {
       stateInput: stateInput,
       zipInput: zipInput,
     }).then(() => {
-      setBusinessList([]);
+      setCreate([]);
     });
   };
 
