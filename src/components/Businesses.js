@@ -1,11 +1,11 @@
-import { Container, Form, Button } from 'react-bootstrap';
-import Row from 'react-bootstrap/Row'
-import Col from 'react-bootstrap/Col'
-import Table from 'react-bootstrap/Table';
+import { Container, Form, Button, Row, Col, Table, Dropdown, DropdownButton, Modal } from 'react-bootstrap';
+//import Row from 'react-bootstrap/Row'
+//import Col from 'react-bootstrap/Col'
+//import Table from 'react-bootstrap/Table';
 import React from 'react';
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
-import Modal from 'react-bootstrap/Modal';
+//import Dropdown from 'react-bootstrap/Dropdown';
+//import DropdownButton from 'react-bootstrap/DropdownButton';
+//import Modal from 'react-bootstrap/Modal';
 import { Fragment, useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import axios from 'axios';
@@ -74,9 +74,10 @@ function Businesses() {
   const [businessList, setBusinessList] = useState([]);
   const [tableView, setTableView] = useState([]);
 
+  //const baseUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
+  const baseUrl = 'http://localhost:8000/businesses';
 
-  const getUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
-  //const getUrl = 'http://localhost:8000/businesses/';
+  const getUrl = baseUrl;
 
   // Fetched the table data when tableView is changed the whole page reRenders with another Select query
   // using businessList as the second argument causes a loop!!
@@ -86,8 +87,7 @@ function Businesses() {
 
 
   const addBusiness = (input) => {
-    const createUrl = "https://cs340-mafia-server.herokuapp.com/businesses/create";
-    //const createUrl = "http://localhost:8000/businesses/create";
+    const createUrl = baseUrl + "/create";
     Axios.post(createUrl, input).then(() => {
       setTableView([]); // does nothing but forces a reRerender
     });
@@ -95,7 +95,7 @@ function Businesses() {
 
   // delete handler
   const deleteBusiness = (id) => {
-    const deleteUrl = `https://cs340-mafia-server.herokuapp.com/businesses/delete/${id}`
+    const deleteUrl = baseUrl + `/delete/${id}`
     Axios.delete(deleteUrl).then((response) => {
       setTableView([]);
     });
@@ -104,8 +104,7 @@ function Businesses() {
 
   // update handler
   const updateBusiness = (id, input) => {
-    const updateUrl = `https://cs340-mafia-server.herokuapp.com/businesses/update/${id}`;
-    //const updateUrl = `http://localhost:8000/businesses/update/${id}`;
+    const updateUrl = baseUrl + `/update/${id}`;
     axios.put(updateUrl, input ).then(response => setTableView([]));
   };
 

@@ -1,15 +1,17 @@
-//
-import {Container, Form, Row, Col, Button} from 'react-bootstrap';
+import {Container, Form, Row, Col, Button, Table, Dropdown, DropdownButton} from 'react-bootstrap';
 import Actions from './Actions';
-import Table from 'react-bootstrap/Table';
+//import Table from 'react-bootstrap/Table';
 
-import Dropdown from 'react-bootstrap/Dropdown'
-import DropdownButton from 'react-bootstrap/DropdownButton'
+//import Dropdown from 'react-bootstrap/Dropdown'
+//import DropdownButton from 'react-bootstrap/DropdownButton'
 
-import React, { useState } from 'react';
+import React, { Fragment, useEffect, useState, useRef } from 'react';
+
+import Axios from "axios";
+import axios from 'axios';
 
 
-var people = [
+/* var people = [
   {
     "id":1,
     "fname":"Bill",
@@ -112,33 +114,92 @@ var people = [
       }
     ]
   }
-];
+]; */
+
+
+class IndividualForm extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = { ...this.props.data };
+  }
+  // Form validation used to clear form on submit
+  // https://github.com/react-bootstrap/react-bootstrap/issues/3730
+
+  // just resets the form input on submit
+  handleSubmit = (onClick) => {
+    if (this.state.individualID) {
+      onClick(this.state.individualID, this.state)
+    } else {
+      onClick(this.state);
+    }
+  }
+
+  handleOnChange = (e) => {
+    const { value, name } = e.target;
+    this.setState({ [name]: value })
+  }
+
+  render() {
+    return (
+      <>
+        <Form  >
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Control size="sm" type="text" placeholder="First name" name="firstName" value={this.state.firstName} onChange={this.handleOnChange} />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control size="sm" type="text" placeholder="Last name" name="lastName" value={this.state.lastName} onChange={this.handleOnChange} />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control size="sm" type="text" placeholder="Age" name="age" value={this.state.age} onChange={this.handleOnChange} />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Button type="submit" onClick={() => this.handleSubmit(this.props.onClick)}>{this.props.type}</Button>
+            </Form.Group>
+          </Form.Row>
+        </ Form>
+      </>
+    );
+  }
+}
 
 
 function Individuals() {
 
-  const [lawsBrokenShown, setLawsBrokenShown] = useState(false);
-  const [businessesOwnedShown, setBusinessesOwnedShown] = useState(false);
+  const [individualList, setIndividualList] = useState([]);
+  //const [lawsBrokenShown, setLawsBrokenShown] = useState(false);
+  //const [businessesOwnedShown, setBusinessesOwnedShown] = useState(false);
+  const [tableView, setTableView] = useState([]);
+  
+  //const baseUrl = 'https://cs340-mafia-server.herokuapp.com/individuals';
+  const baseUrl = 'http://localhost:8000/individuals';
+  
+  const getUrl = baseUrl;
+  
+  useEffect(() => {
+    axios.get(getUrl).then(response => setIndividualList(response.data));
+  }, [tableView]);
 
 
   function PersonRow(props) {
     return (
         <tr>
-          <td>{people[props.index].id}</td>
-          <td>{people[props.index].fname}</td>
-          <td>{people[props.index].lname}</td>
-          <td>{people[props.index].age}</td>
-          <td>{people[props.index].mafiaFamily}</td>
-          <td>{people[props.index].mafiaRole}</td>
+          <td>{props.person.individualID}</td>
+          <td>{props.person.firstName}</td>
+          <td>{props.person.lastName}</td>
+          <td>{props.person.age}</td>
+          <td>{props.person.mafiaFamily}</td>
+          <td>{props.person.mafiaRole}</td>
           <td>
-            <DropDownPersonActions index={props.index}/>
+            <DropDownPersonActions person={props.person}/>
           </td>
         </tr>
     );
   }
 
 
-  function LawsBroken(props) {
+  /* function LawsBroken(props) {
     if(!people[props.index].showLawsBroken)
       return null;
     return (
@@ -171,10 +232,10 @@ function Individuals() {
         </td>
       </tr>
     );
-  }
+  } */
 
 
-  function BusinessesOwned(props) {
+  /* function BusinessesOwned(props) {
     if(!people[props.index].showBusinesses)
       return null;
     return (
@@ -217,31 +278,48 @@ function Individuals() {
         </td>
       </tr>
     );
-  }
+  } */
 
 
   function DropDownPersonActions (props) {
+	  //<Dropdown.Item as="button" onClick={() => ShowLawsBrokenSubTable(props.index)}>Show laws broken</Dropdown.Item>
+      //<Dropdown.Item as="button" onClick={() => ShowBusinessesSubTable(props.index)}>Show businesses owned</Dropdown.Item>
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
-        <Dropdown.Item as="button" onClick={() => ShowLawsBrokenSubTable(props.index)}>Show laws broken</Dropdown.Item>
-        <Dropdown.Item as="button" onClick={() => ShowBusinessesSubTable(props.index)}>Show businesses owned</Dropdown.Item>
-        <Dropdown.Item as="button">Update</Dropdown.Item>
-        <Dropdown.Item as="button">Delete</Dropdown.Item>
+        <Dropdown.Item as={UpdateModal} person={props.person} />
+        <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.IndividualID)}>Delete</Dropdown.Item>
       </DropdownButton>
     );
   }
 
 
-  function ShowLawsBrokenSubTable(index) {
+  /* function ShowLawsBrokenSubTable(index) {
     people[index].showLawsBroken = !people[index].showLawsBroken;
     setLawsBrokenShown(!lawsBrokenShown);
-  }
+  } */
 
-  function ShowBusinessesSubTable(index) {
+  /* function ShowBusinessesSubTable(index) {
     people[index].showBusinesses = !people[index].showBusinesses;
     setBusinessesOwnedShown(!businessesOwnedShown);
+  } */
+
+  const addIndividual = (input) => {
+	const createUrl = baseUrl + "/create";
+	Axios.post(createUrl, input).then(() => {
+      setTableView([]); // does nothing but forces a reRerender
+    });
   }
 
+  function UpdateModal(props) {
+    console.log("updating person with individualID = " + props.person.individualID);
+  }
+  
+  const deleteIndividual = (id) => {
+	console.log("deleting person with individualID = " + id);  
+  };
+
+	//<LawsBroken index={index} />
+    //<BusinessesOwned index={index} />
 
    return (
     <Container fluid>
@@ -259,6 +337,10 @@ function Individuals() {
       </Form>
 
       <p></p>
+	  
+	  <IndividualForm type="Create" onClick={addIndividual} />
+	  
+	  <p></p>
 
       <Table bordered hover>
         <thead>
@@ -275,45 +357,11 @@ function Individuals() {
 
         <tbody>
 
-          <tr>
-              <td>Auto</td>
-            <td>
-              <Form>
-                <Form.Control size="m" type="text" placeholder="First Name" />
-              </Form>
-            </td>
-            <td>
-              <Form>
-                <Form.Control size="m" type="text" placeholder="Last Name" />
-              </Form>
-            </td>
-            <td>
-              <Form>
-                <Form.Control size="m" type="text" placeholder="Age" />
-              </Form>
-            </td>
-            <td>
-              <Form>
-                <Form.Control size="m" type="text" placeholder="Mafia Family" />
-              </Form>
-            </td>
-            <td>
-              <Form>
-                <Form.Control size="m" type="text" placeholder="Mafia Role" />
-              </Form>
-            </td>
-            <td>
-              <Button size="sm" type="submit">Create</Button>
-            </td>
-          </tr>
-
           {
-            people.map((person, index) => (
-              <React.Fragment>
-                <PersonRow index={index} />
-                <LawsBroken index={index} />
-                <BusinessesOwned index={index} />
-              </React.Fragment>
+            individualList.map((person, index) => (
+              <Fragment key={person.individualID}>
+                <PersonRow person={person} />
+              </Fragment>
             ))
           }
 
@@ -328,20 +376,3 @@ function Individuals() {
 
 
 export default Individuals;
-
-
-// <div>
-//   <Form>
-//     <Form.Label>First Name</Form.Label>
-//     <Form.Control size="lg" type="text" placeholder="First Name" />
-//     <Form.Label>Last Name</Form.Label>
-//     <Form.Control size="lg" type="text" placeholder="Last Name" />
-//     <Form.Label>Age</Form.Label>
-//     <Form.Control size="lg" type="text" placeholder="Age" />
-//     <Form.Label>Mafia Family</Form.Label>
-//     <Form.Control size="lg" type="text" placeholder="Family" />
-//     <Form.Label>Mafia Role</Form.Label>
-//     <Form.Control size="lg" type="text" placeholder="Role" />
-//   </Form>
-//  <Button type="submit">Submit</Button>
-// </div>
