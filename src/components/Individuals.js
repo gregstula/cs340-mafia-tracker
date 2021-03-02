@@ -1,4 +1,4 @@
-import {Container, Form, Row, Col, Button, Table, Dropdown, DropdownButton} from 'react-bootstrap';
+import {Container, Form, Row, Col, Button, Table, Dropdown, DropdownButton, Modal} from 'react-bootstrap';
 import Actions from './Actions';
 //import Table from 'react-bootstrap/Table';
 
@@ -129,9 +129,9 @@ class IndividualForm extends React.Component {
   // just resets the form input on submit
   handleSubmit = (onClick) => {
     if (this.state.individualID) {
-      onClick(this.state.individualID, this.state)
+      onClick(this.state.individualID, this.state) //since individualID is available, we're updating something
     } else {
-      onClick(this.state);
+      onClick(this.state); //since individualID is unavailable, we're making a new individual
     }
   }
 
@@ -287,7 +287,7 @@ function Individuals() {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
         <Dropdown.Item as={UpdateModal} person={props.person} />
-        <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.IndividualID)}>Delete</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.individualID)}>Delete</Dropdown.Item>
       </DropdownButton>
     );
   }
@@ -311,11 +311,44 @@ function Individuals() {
   }
 
   function UpdateModal(props) {
-    console.log("updating person with individualID = " + props.person.individualID);
+	const [show, setShow] = useState(false);
+
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+
+    return (
+      <>
+        <Dropdown.Item as='button' onClick={handleShow}>
+          Update
+        </Dropdown.Item>
+
+        <Modal size="xl" show={show} onHide={handleClose} backdrop="static" keyboard={true}>
+          <Modal.Header closeButton>
+            <Modal.Title>Update {props.person.firstName + " " + props.person.lastName} ID: {props.person.individualID}</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>
+            <IndividualForm type="Update" onClick={updateIndividual} data={props.person} />
+          </Modal.Body>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      </>
+    );
   }
   
+  const updateIndividual = (id, input) => {
+    const updateUrl = baseUrl + `/update/${id}`;
+    axios.put(updateUrl, input ).then(response => setTableView([]));
+  };
+  
   const deleteIndividual = (id) => {
-	console.log("deleting person with individualID = " + id);  
+	const deleteUrl = baseUrl + `/delete/${id}`
+    Axios.delete(deleteUrl).then((response) => {
+      setTableView([]);
+    });  
   };
 
 	//<LawsBroken index={index} />
