@@ -10,7 +10,7 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Axios from "axios";
 import axios from 'axios';
 
-import baseUrl from './baseUrl';
+import serverUrl from './serverUrl';
 
 
 /* var people = [
@@ -172,12 +172,10 @@ function Individuals() {
   //const [businessesOwnedShown, setBusinessesOwnedShown] = useState(false);
   const [tableView, setTableView] = useState([]);
   
-  const baseUrl = baseUrl();
-  
-  const getUrl = baseUrl();
-  
+  const baseUrl = serverUrl("individuals");
+    
   useEffect(() => {
-    axios.get(getUrl).then(response => setIndividualList(response.data));
+    axios.get(baseUrl).then(response => setIndividualList(response.data));
   }, [tableView]);
 
 

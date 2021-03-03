@@ -3,7 +3,7 @@ import React from 'react';
 import { Fragment, useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import axios from 'axios';
-import baseUrl from './baseUrl';
+import serverUrl from './serverUrl';
 
 // Component for business form
 // Much more effecient at handling state and saving render calls
@@ -67,13 +67,12 @@ function Businesses() {
   const [businessList, setBusinessList] = useState([]);
   const [tableView, setTableView] = useState([]);
 
-  const baseUrl = baseUrl();
-  const getUrl = baseUrl();
+  const baseUrl = serverUrl('businesses');
 
   // Fetched the table data when tableView is changed the whole page reRenders with another Select query
   // using businessList as the second argument causes a loop!!
   useEffect(() => {
-    axios.get(getUrl).then(response => setBusinessList(response.data));
+    axios.get(baseUrl).then(response => setBusinessList(response.data));
   }, [tableView]);
 
 
