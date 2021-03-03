@@ -1,14 +1,9 @@
 import { Container, Form, Button, Row, Col, Table, Dropdown, DropdownButton, Modal } from 'react-bootstrap';
-//import Row from 'react-bootstrap/Row'
-//import Col from 'react-bootstrap/Col'
-//import Table from 'react-bootstrap/Table';
 import React from 'react';
-//import Dropdown from 'react-bootstrap/Dropdown';
-//import DropdownButton from 'react-bootstrap/DropdownButton';
-//import Modal from 'react-bootstrap/Modal';
 import { Fragment, useEffect, useState, useRef } from "react";
 import Axios from "axios";
 import axios from 'axios';
+import baseUrl from './baseUrl';
 
 // Component for business form
 // Much more effecient at handling state and saving render calls
@@ -72,10 +67,8 @@ function Businesses() {
   const [businessList, setBusinessList] = useState([]);
   const [tableView, setTableView] = useState([]);
 
-  //const baseUrl = 'https://cs340-mafia-server.herokuapp.com/businesses';
-  const baseUrl = 'http://localhost:8000/businesses';
-
-  const getUrl = baseUrl;
+  const baseUrl = baseUrl();
+  const getUrl = baseUrl();
 
   // Fetched the table data when tableView is changed the whole page reRenders with another Select query
   // using businessList as the second argument causes a loop!!

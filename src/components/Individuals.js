@@ -10,6 +10,8 @@ import React, { Fragment, useEffect, useState, useRef } from 'react';
 import Axios from "axios";
 import axios from 'axios';
 
+import baseUrl from './baseUrl';
+
 
 /* var people = [
   {
@@ -123,8 +125,6 @@ class IndividualForm extends React.Component {
     super(props);
     this.state = { ...this.props.data };
   }
-  // Form validation used to clear form on submit
-  // https://github.com/react-bootstrap/react-bootstrap/issues/3730
 
   // just resets the form input on submit
   handleSubmit = (onClick) => {
@@ -172,10 +172,9 @@ function Individuals() {
   //const [businessesOwnedShown, setBusinessesOwnedShown] = useState(false);
   const [tableView, setTableView] = useState([]);
   
-  //const baseUrl = 'https://cs340-mafia-server.herokuapp.com/individuals';
-  const baseUrl = 'http://localhost:8000/individuals';
+  const baseUrl = baseUrl();
   
-  const getUrl = baseUrl;
+  const getUrl = baseUrl();
   
   useEffect(() => {
     axios.get(getUrl).then(response => setIndividualList(response.data));
