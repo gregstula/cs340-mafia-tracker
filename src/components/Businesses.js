@@ -19,8 +19,6 @@ class BusinessForm extends React.Component {
     super(props);
     this.state = { ...this.props.data };
   }
-  // Form validation used to clear form on submit
-  // https://github.com/react-bootstrap/react-bootstrap/issues/3730
 
   // just resets the form input on submit
   handleSubmit = (onClick) => {
