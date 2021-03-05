@@ -168,12 +168,11 @@ class IndividualForm extends React.Component {
 function Individuals() {
 
   const [individualList, setIndividualList] = useState([]);
-  //const [lawsBrokenShown, setLawsBrokenShown] = useState(false);
-  //const [businessesOwnedShown, setBusinessesOwnedShown] = useState(false);
+  const [showingBusinesses, setShowingBusinesses] = useState([]);
   const [tableView, setTableView] = useState([]);
-  
+
   const baseUrl = serverUrl("individuals");
-    
+
   useEffect(() => {
     axios.get(baseUrl).then(response => setIndividualList(response.data));
   }, [tableView]);
@@ -232,9 +231,14 @@ function Individuals() {
   } */
 
 
-  /* function BusinessesOwned(props) {
-    if(!people[props.index].showBusinesses)
+  function BusinessesOwned(props) {
+    console.log("showingBusinesses = " + showingBusinesses);
+    if(showingBusinesses.findIndex((val) => {return val == props.personID}) < 0)
       return null;
+
+    console.log("seems like we should print a business");
+    var businessesList = [];
+    Axios.get(baseUrl + `/getBusinesses/${props.personID}`).then(response => businessesList = response.data);
     return (
       <tr>
         <td colSpan="7">
@@ -254,7 +258,7 @@ function Individuals() {
                 </thead>
                 <tbody>
                   {
-                    people[props.index].businesses.map(business => (
+                    businessesList.map(business => (
                       <tr>
                         <td>{business.name}</td>
                         <td>{business.number}</td>
@@ -275,14 +279,30 @@ function Individuals() {
         </td>
       </tr>
     );
-  } */
+  }
 
 
   function DropDownPersonActions (props) {
-	  //<Dropdown.Item as="button" onClick={() => ShowLawsBrokenSubTable(props.index)}>Show laws broken</Dropdown.Item>
-      //<Dropdown.Item as="button" onClick={() => ShowBusinessesSubTable(props.index)}>Show businesses owned</Dropdown.Item>
+    //<Dropdown.Item as="button" onClick={() => ShowLawsBrokenSubTable(props.index)}>Show laws broken</Dropdown.Item>
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
+        <Dropdown.Item as="button" onClick={() => {
+            var index = showingBusinesses.findIndex((val) => {return val == props.person.individualID})
+            if(index < 0)
+            {
+              console.log("showing business subtable for person " + props.person.individualID);
+              setShowingBusinesses(showingBusinesses.concat(props.person.individualID));
+            }
+            else
+            {
+              console.log("closing business subtable for person " + props.person.individualID);
+              setShowingBusinesses(showingBusinesses.slice(0,index).concat(showingBusinesses.slice(index + 1)));
+            }
+
+            //setTableView([]); // not sure if this is the best place for this
+          }}>
+          Show businesses owned
+        </Dropdown.Item>
         <Dropdown.Item as={UpdateModal} person={props.person} />
         <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.individualID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -290,25 +310,15 @@ function Individuals() {
   }
 
 
-  /* function ShowLawsBrokenSubTable(index) {
-    people[index].showLawsBroken = !people[index].showLawsBroken;
-    setLawsBrokenShown(!lawsBrokenShown);
-  } */
-
-  /* function ShowBusinessesSubTable(index) {
-    people[index].showBusinesses = !people[index].showBusinesses;
-    setBusinessesOwnedShown(!businessesOwnedShown);
-  } */
-
   const addIndividual = (input) => {
-	const createUrl = baseUrl + "/create";
-	Axios.post(createUrl, input).then(() => {
+  	const createUrl = baseUrl + "/create";
+  	Axios.post(createUrl, input).then(() => {
       setTableView([]); // does nothing but forces a reRerender
     });
   }
 
   function UpdateModal(props) {
-	const [show, setShow] = useState(false);
+	   const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -335,21 +345,20 @@ function Individuals() {
       </>
     );
   }
-  
+
   const updateIndividual = (id, input) => {
     const updateUrl = baseUrl + `/update/${id}`;
     axios.put(updateUrl, input ).then(response => setTableView([]));
   };
-  
+
   const deleteIndividual = (id) => {
-	const deleteUrl = baseUrl + `/delete/${id}`
+	   const deleteUrl = baseUrl + `/delete/${id}`
     Axios.delete(deleteUrl).then((response) => {
       setTableView([]);
-    });  
+    });
   };
 
 	//<LawsBroken index={index} />
-    //<BusinessesOwned index={index} />
 
    return (
     <Container fluid>
@@ -367,9 +376,9 @@ function Individuals() {
       </Form>
 
       <p></p>
-	  
+
 	  <IndividualForm type="Create" onClick={addIndividual} />
-	  
+
 	  <p></p>
 
       <Table bordered hover>
@@ -391,6 +400,7 @@ function Individuals() {
             individualList.map((person, index) => (
               <Fragment key={person.individualID}>
                 <PersonRow person={person} />
+                <BusinessesOwned personID={person.individualID} />
               </Fragment>
             ))
           }
