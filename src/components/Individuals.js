@@ -166,7 +166,6 @@ var showingBusinesses = [];
 function Individuals() {
 
   const [individualList, setIndividualList] = useState([]);
-  //const [showingBusinesses, setShowingBusinesses] = useState([]);
   const [tableView, setTableView] = useState([]);
 
   const baseUrl = serverUrl("individuals");
@@ -234,7 +233,7 @@ function Individuals() {
     var index = showingBusinesses.findIndex((val) => {return val.personID == personID})
     if(index < 0)
     {
-      showingBusinesses.push({"personID": personID, "businessesOwned": []});
+      showingBusinesses.push({"personID": personID, "businessesOwned": [], "addableBusinesses": []});
       index = showingBusinesses.length - 1;
 
       Axios.get(baseUrl + `/getBusinesses/${personID}`).then(response => {
@@ -246,6 +245,7 @@ function Individuals() {
     else //if he already exists, just remove him
     {
       showingBusinesses.splice(index, 1);
+
       //now that we're finished, rerender;
       setTableView([]);
     }
@@ -293,8 +293,29 @@ function Individuals() {
                 </tbody>
               </Table>
               <Form>
-                <Form.Control size="m" type="text" placeholder="Search for existing business to add to businesses owned by this person" />
+                <Form.Control
+                  size="m"
+                  type="text"
+                  onChange={(input) => {
+                    console.log(input.target.value);
+                    if(input.target.value) {
+                      GetAddableBusinesses(input.target.value, index)
+                    }
+                    else {
+                      showingBusinesses[index].addableBusinesses = [];
+                    }
+                  }}
+                  placeholder="Search for existing business to add to businesses owned by this person"
+                />
               </Form>
+              <Button size="sm" type="search" onClick={() => {
+                  setTableView([]);
+                }}>Search</Button>
+              <Button size="sm" variant="danger" type="delete" onClick={() => {
+                  showingBusinesses[index].addableBusinesses = [];
+                  setTableView([]);
+                }}>Clear Results</Button>
+              <DisplayAddableBusinesses index={index}/>
         </td>
       </tr>
     );
@@ -311,6 +332,61 @@ function Individuals() {
       });
 
       setTableView([]); //rerender now that the thing in the array has been removed
+    });
+  }
+
+  function GetAddableBusinesses(searchInput, index) {
+
+    Axios.get(baseUrl + `/searchBusinesses/${searchInput}`).then(response => {
+      showingBusinesses[index].addableBusinesses = response.data;
+      //setTableView([]);
+    });
+  }
+
+  function DisplayAddableBusinesses(props) {
+
+    var index = props.index;
+
+    if(showingBusinesses[index].addableBusinesses.length == 0)
+      return null;
+
+    return (
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>Business Name</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>{
+          showingBusinesses[index].addableBusinesses.map(business => {
+            //console.log(business);
+            return (
+              <tr>
+                <td>{business.businessName}</td>
+                <td>{business.city}</td>
+                <td>{business.state}</td>
+                <td><Button size="sm" type="submit" onClick={() => SetBusinessOwner(business.businessID, props.personID)}>Add</Button></td>
+              </tr>
+            )
+          })
+        }</tbody>
+      </Table>
+    );
+  }
+
+  function SetBusinessOwner(newBusinessID, personID) {
+    const newBusinessUrl = baseUrl + `/setBusinessOwner/${newBusinessID}/${personID}`;
+    Axios.put(newBusinessUrl).then(resonse => {
+      //we've got it in the database, just need to get it into our array
+      Axios.get(baseUrl + `/getBusinesses/${personID}`).then(response => {
+        var index = showingBusinesses.findIndex((val) => {return val.personID == personID});
+        showingBusinesses[index].businessesOwned = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
     });
   }
 
