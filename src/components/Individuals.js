@@ -1,9 +1,5 @@
 import {Container, Form, Row, Col, Button, Table, Dropdown, DropdownButton, Modal} from 'react-bootstrap';
 import Actions from './Actions';
-//import Table from 'react-bootstrap/Table';
-
-//import Dropdown from 'react-bootstrap/Dropdown'
-//import DropdownButton from 'react-bootstrap/DropdownButton'
 
 import React, { Fragment, useEffect, useState, useRef } from 'react';
 
@@ -165,10 +161,12 @@ class IndividualForm extends React.Component {
 }
 
 
+var showingBusinesses = [];
+
 function Individuals() {
 
   const [individualList, setIndividualList] = useState([]);
-  const [showingBusinesses, setShowingBusinesses] = useState([]);
+  //const [showingBusinesses, setShowingBusinesses] = useState([]);
   const [tableView, setTableView] = useState([]);
 
   const baseUrl = serverUrl("individuals");
@@ -231,14 +229,40 @@ function Individuals() {
   } */
 
 
-  function BusinessesOwned(props) {
-    console.log("showingBusinesses = " + showingBusinesses);
-    if(showingBusinesses.findIndex((val) => {return val == props.personID}) < 0)
+  function GetBusinessesOwned(personID) {
+    //find the guy we're looking for, adding him if he doesn't exist
+    var index = showingBusinesses.findIndex((val) => {return val.personID == personID})
+    if(index < 0)
+    {
+      //setShowingBusinesses(showingBusinesses.concat({"personID": personID, "businessesOwned": []}));
+      showingBusinesses.push({"personID": personID, "businessesOwned": []});
+      index = showingBusinesses.length - 1;
+
+      Axios.get(baseUrl + `/getBusinesses/${personID}`).then(response => {
+
+        showingBusinesses[index].businessesOwned = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    }
+    else //if he already exists, just remove him
+    {
+      console.log("index for removal = " + index);
+      //setShowingBusinesses(showingBusinesses.slice(0,index).concat(showingBusinesses.slice(index + 1)));
+      showingBusinesses.splice(index, 1);
+      //now that we're finished, rerender;
+      setTableView([]);
+    }
+  }
+
+  function PrintBusinessesOwned(props) {
+    //console.log(showingBusinesses);
+    var index = showingBusinesses.findIndex((val) => {return val.personID == props.person.individualID});
+    if(index < 0)
       return null;
 
-    console.log("seems like we should print a business");
-    var businessesList = [];
-    Axios.get(baseUrl + `/getBusinesses/${props.personID}`).then(response => businessesList = response.data);
+    var businessesList = showingBusinesses[index].businessesOwned;
+
     return (
       <tr>
         <td colSpan="7">
@@ -260,8 +284,8 @@ function Individuals() {
                   {
                     businessesList.map(business => (
                       <tr>
-                        <td>{business.name}</td>
-                        <td>{business.number}</td>
+                        <td>{business.businessName}</td>
+                        <td>{business.buildingNumber}</td>
                         <td>{business.streetName}</td>
                         <td>{business.city}</td>
                         <td>{business.state}</td>
@@ -286,23 +310,7 @@ function Individuals() {
     //<Dropdown.Item as="button" onClick={() => ShowLawsBrokenSubTable(props.index)}>Show laws broken</Dropdown.Item>
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
-        <Dropdown.Item as="button" onClick={() => {
-            var index = showingBusinesses.findIndex((val) => {return val == props.person.individualID})
-            if(index < 0)
-            {
-              console.log("showing business subtable for person " + props.person.individualID);
-              setShowingBusinesses(showingBusinesses.concat(props.person.individualID));
-            }
-            else
-            {
-              console.log("closing business subtable for person " + props.person.individualID);
-              setShowingBusinesses(showingBusinesses.slice(0,index).concat(showingBusinesses.slice(index + 1)));
-            }
-
-            //setTableView([]); // not sure if this is the best place for this
-          }}>
-          Show businesses owned
-        </Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => GetBusinessesOwned(props.person.individualID)}>Show businesses owned</Dropdown.Item>
         <Dropdown.Item as={UpdateModal} person={props.person} />
         <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.individualID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -400,7 +408,7 @@ function Individuals() {
             individualList.map((person, index) => (
               <Fragment key={person.individualID}>
                 <PersonRow person={person} />
-                <BusinessesOwned personID={person.individualID} />
+                <PrintBusinessesOwned person={person} />
               </Fragment>
             ))
           }
