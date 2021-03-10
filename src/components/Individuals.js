@@ -234,12 +234,10 @@ function Individuals() {
     var index = showingBusinesses.findIndex((val) => {return val.personID == personID})
     if(index < 0)
     {
-      //setShowingBusinesses(showingBusinesses.concat({"personID": personID, "businessesOwned": []}));
       showingBusinesses.push({"personID": personID, "businessesOwned": []});
       index = showingBusinesses.length - 1;
 
       Axios.get(baseUrl + `/getBusinesses/${personID}`).then(response => {
-
         showingBusinesses[index].businessesOwned = response.data;
         //now that we're finished, rerender;
         setTableView([]);
@@ -247,8 +245,6 @@ function Individuals() {
     }
     else //if he already exists, just remove him
     {
-      console.log("index for removal = " + index);
-      //setShowingBusinesses(showingBusinesses.slice(0,index).concat(showingBusinesses.slice(index + 1)));
       showingBusinesses.splice(index, 1);
       //now that we're finished, rerender;
       setTableView([]);
@@ -256,7 +252,6 @@ function Individuals() {
   }
 
   function PrintBusinessesOwned(props) {
-    //console.log(showingBusinesses);
     var index = showingBusinesses.findIndex((val) => {return val.personID == props.person.individualID});
     if(index < 0)
       return null;
@@ -291,7 +286,7 @@ function Individuals() {
                         <td>{business.state}</td>
                         <td>{business.zip}</td>
                         <td>{business.familyOwner}</td>
-                        <td><Button size="sm" variant="danger" type="delete">Delete</Button></td>
+                        <td><Button size="sm" variant="danger" type="delete" onClick={() => SetBusinessOwnerToNull(business.businessID)}>Delete</Button></td>
                       </tr>
                     ))
                   }
@@ -303,6 +298,20 @@ function Individuals() {
         </td>
       </tr>
     );
+  }
+
+  function SetBusinessOwnerToNull(id) {
+    const setBusinessOwnerToNullUrl = baseUrl + `/setBusinessOwnerToNull/${id}`;
+    Axios.delete(setBusinessOwnerToNullUrl).then((respons) => {
+      //the things removed from the database, we just need to remove it from the array
+      var index = showingBusinesses.map((person) => {
+        var i = person.businessesOwned.findIndex((businessVal) => {return businessVal.businessID == id});
+        if(i >= 0)
+          person.businessesOwned.splice(i, 1);
+      });
+
+      setTableView([]); //rerender now that the thing in the array has been removed
+    });
   }
 
 
