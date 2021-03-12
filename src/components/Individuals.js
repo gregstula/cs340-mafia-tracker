@@ -9,112 +9,6 @@ import axios from 'axios';
 import serverUrl from './serverUrl';
 
 
-/* var people = [
-  {
-    "id":1,
-    "fname":"Bill",
-    "lname":"Omerta",
-    "age":40,
-    "mafiaFamily":"Omerta",
-    "mafiaRole":"Godfater",
-    "showLawsBroken":false,
-    "showBusinesses":false,
-    "lawsBroken": [
-      {
-        "lawName":"murder",
-        "sentence":"death"
-      },
-      {
-        "lawName":"blackmail",
-        "sentence":"$50 fine"
-      }
-    ],
-    "businesses":[
-      {
-        "name":"The Gomorrah",
-        "number":"34587",
-        "streetName":"Highway way",
-        "city":"Paris",
-        "state":"yes",
-        "zip":"34587",
-        "familyOwner":"Omerta"
-      },
-      {
-        "name":"The Laundry place",
-        "number":"38367",
-        "streetName":"Street Way",
-        "city":"Helvetica",
-        "state":"no",
-        "zip":"34587",
-        "familyOwner":""
-      }
-    ]
-  },
-  {
-    "id":2,
-    "fname":"Bob",
-    "lname":"Odenkirk",
-    "age":45,
-    "mafiaFamily":"",
-    "mafiaRole":"",
-    "showLawsBroken":false,
-    "showBusinesses":false,
-    "lawsBroken": [
-      {
-        "lawName":"Drug smuggling",
-        "sentence":"10 years"
-      },
-      {
-        "lawName":"Forgery",
-        "sentence":"death"
-      }
-    ],
-    "businesses":[
-      {
-        "name":"Better Call Saul",
-        "number":"34587",
-        "streetName":"Highway way",
-        "city":"Paris",
-        "state":"yes",
-        "zip":"34587",
-        "familyOwner":""
-      }
-    ]
-  },
-  {
-    "id":3,
-    "fname":"Elon",
-    "lname":"Musk",
-    "age":49,
-    "mafiaFamily":"",
-    "mafiaRole":"",
-    "showLawsBroken":false,
-    "showBusinesses":false,
-    "lawsBroken": [],
-    "businesses":[
-      {
-        "name":"SpaceX",
-        "number":"34587",
-        "streetName":"Highway way",
-        "city":"Paris",
-        "state":"yes",
-        "zip":"34587",
-        "familyOwner":""
-      },
-      {
-        "name":"Tesla",
-        "number":"38367",
-        "streetName":"Street Way",
-        "city":"Helvetica",
-        "state":"no",
-        "zip":"34587",
-        "familyOwner":""
-      }
-    ]
-  }
-]; */
-
-
 class IndividualForm extends React.Component {
 
   constructor(props) {
@@ -182,7 +76,7 @@ function Individuals() {
           <td>{props.person.firstName}</td>
           <td>{props.person.lastName}</td>
           <td>{props.person.age}</td>
-          <td>{props.person.mafiaFamily}</td>
+          <td>{props.person.familyName}</td>
           <td>{props.person.mafiaRole}</td>
           <td>
             <DropDownPersonActions person={props.person}/>
@@ -285,7 +179,7 @@ function Individuals() {
                         <td>{business.city}</td>
                         <td>{business.state}</td>
                         <td>{business.zip}</td>
-                        <td>{business.familyOwner}</td>
+                        <td>{business.familyName}</td>
                         <td><Button size="sm" variant="danger" type="delete" onClick={() => SetBusinessOwnerToNull(business.businessID)}>Delete</Button></td>
                       </tr>
                     ))
@@ -321,20 +215,6 @@ function Individuals() {
     );
   }
 
-  function SetBusinessOwnerToNull(id) {
-    const setBusinessOwnerToNullUrl = baseUrl + `/setBusinessOwnerToNull/${id}`;
-    Axios.delete(setBusinessOwnerToNullUrl).then((respons) => {
-      //the things removed from the database, we just need to remove it from the array
-      var index = showingBusinesses.map((person) => {
-        var i = person.businessesOwned.findIndex((businessVal) => {return businessVal.businessID == id});
-        if(i >= 0)
-          person.businessesOwned.splice(i, 1);
-      });
-
-      setTableView([]); //rerender now that the thing in the array has been removed
-    });
-  }
-
   function GetAddableBusinesses(searchInput, index) {
 
     Axios.get(baseUrl + `/searchBusinesses/${searchInput}`).then(response => {
@@ -357,18 +237,30 @@ function Individuals() {
             <th>Business Name</th>
             <th>City</th>
             <th>State</th>
+            <th>Current Owner</th>
+            <th>Family Owner</th>
             <th>Actions</th>
           </tr>
         </thead>
         <tbody>{
           showingBusinesses[index].addableBusinesses.map(business => {
-            //console.log(business);
+            var fName = business.firstName;
+            var lName = business.lastName;
+            if(!fName)
+              fName = "";
+            else
+              lName = " " + lName;
+            if(!lName)
+              lName = "";
+
             return (
               <tr>
                 <td>{business.businessName}</td>
                 <td>{business.city}</td>
                 <td>{business.state}</td>
-                <td><Button size="sm" type="submit" onClick={() => SetBusinessOwner(business.businessID, props.personID)}>Add</Button></td>
+                <td>{fName + lName}</td>
+                <td>{business.familyName}</td>
+                <td><Button size="sm" type="submit" onClick={() => SetBusinessOwner(business.businessID, showingBusinesses[index].personID)}>Add</Button></td>
               </tr>
             )
           })
@@ -377,16 +269,44 @@ function Individuals() {
     );
   }
 
-  function SetBusinessOwner(newBusinessID, personID) {
-    const newBusinessUrl = baseUrl + `/setBusinessOwner/${newBusinessID}/${personID}`;
-    Axios.put(newBusinessUrl).then(resonse => {
-      //we've got it in the database, just need to get it into our array
+  function SetBusinessOwner(businessID, personID) {
+    const businessUrl = baseUrl + `/setBusinessOwner/${businessID}/${personID}`;
+
+    //if that business was already owned, we need to remove it from the previous owner's businessesOwned
+    var previousOwnerIndex = showingBusinesses.findIndex(person => {
+      var businessIndex = person.businessesOwned.findIndex(business => {return business.businessID == businessID});
+      if(businessIndex >= 0) {
+        //we've got it, so remove it
+        person.businessesOwned.splice(businessIndex, 1);
+        //return true so that we stop looking
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+
+    Axios.put(businessUrl).then(resonse => {
       Axios.get(baseUrl + `/getBusinesses/${personID}`).then(response => {
         var index = showingBusinesses.findIndex((val) => {return val.personID == personID});
         showingBusinesses[index].businessesOwned = response.data;
         //now that we're finished, rerender;
         setTableView([]);
       });
+    });
+  }
+
+  function SetBusinessOwnerToNull(id) {
+    const setBusinessOwnerToNullUrl = baseUrl + `/setBusinessOwnerToNull/${id}`;
+    Axios.delete(setBusinessOwnerToNullUrl).then((respons) => {
+      //the things removed from the database, we just need to remove it from the array
+      var index = showingBusinesses.map((person) => {
+        var i = person.businessesOwned.findIndex((businessVal) => {return businessVal.businessID == id});
+        if(i >= 0)
+          person.businessesOwned.splice(i, 1);
+      });
+
+      setTableView([]); //rerender now that the thing in the array has been removed
     });
   }
 
