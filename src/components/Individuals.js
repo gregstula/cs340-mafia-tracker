@@ -1,7 +1,7 @@
-import {Container, Form, Row, Col, Button, Table, Dropdown, DropdownButton, Modal} from 'react-bootstrap';
-import Actions from './Actions';
+import {Container, Form/*, Row*/, Col, Button, Table, Dropdown, DropdownButton, Modal} from 'react-bootstrap';
+//import Actions from './Actions';
 
-import React, { Fragment, useEffect, useState, useRef } from 'react';
+import React, { Fragment, useEffect, useState/*, useRef*/ } from 'react';
 
 import Axios from "axios";
 import axios from 'axios';
@@ -56,6 +56,7 @@ class IndividualForm extends React.Component {
 
 
 var showingBusinesses = [];
+var showingLawsBroken = [];
 
 function Individuals() {
 
@@ -84,42 +85,6 @@ function Individuals() {
         </tr>
     );
   }
-
-
-  /* function LawsBroken(props) {
-    if(!people[props.index].showLawsBroken)
-      return null;
-    return (
-      <tr>
-        <td colSpan="7">
-              <b>Laws broken</b>
-              <Table striped bordered hover>
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Sentence</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {
-                    people[props.index].lawsBroken.map(law => (
-                      <tr>
-                        <td>{law.lawName}</td>
-                        <td>{law.sentence}</td>
-                        <td><Button size="sm" variant="danger" type="delete">Delete</Button></td>
-                      </tr>
-                    ))
-                  }
-                </tbody>
-              </Table>
-              <Form>
-                <Form.Control size="m" type="text" placeholder="Search for existing law to add to add to this person's list of broken laws" />
-              </Form>
-        </td>
-      </tr>
-    );
-  } */
 
 
   function GetBusinessesOwned(personID) {
@@ -191,7 +156,6 @@ function Individuals() {
                   size="m"
                   type="text"
                   onChange={(input) => {
-                    console.log(input.target.value);
                     if(input.target.value) {
                       GetAddableBusinesses(input.target.value, index)
                     }
@@ -273,7 +237,7 @@ function Individuals() {
     const businessUrl = baseUrl + `/setBusinessOwner/${businessID}/${personID}`;
 
     //if that business was already owned, we need to remove it from the previous owner's businessesOwned
-    var previousOwnerIndex = showingBusinesses.findIndex(person => {
+    showingBusinesses.map(person => {
       var businessIndex = person.businessesOwned.findIndex(business => {return business.businessID == businessID});
       if(businessIndex >= 0) {
         //we've got it, so remove it
@@ -298,12 +262,163 @@ function Individuals() {
 
   function SetBusinessOwnerToNull(id) {
     const setBusinessOwnerToNullUrl = baseUrl + `/setBusinessOwnerToNull/${id}`;
-    Axios.delete(setBusinessOwnerToNullUrl).then((respons) => {
+    Axios.put(setBusinessOwnerToNullUrl).then((response) => {
       //the things removed from the database, we just need to remove it from the array
-      var index = showingBusinesses.map((person) => {
+      showingBusinesses.map((person) => {
         var i = person.businessesOwned.findIndex((businessVal) => {return businessVal.businessID == id});
         if(i >= 0)
           person.businessesOwned.splice(i, 1);
+
+        return i;
+      });
+
+      setTableView([]); //rerender now that the thing in the array has been removed
+    });
+  }
+
+
+  function GetLawsBroken(personID) {
+    //find the guy we're looking for, adding him if he doesn't exist
+    var index = showingLawsBroken.findIndex((val) => {return val.personID == personID})
+    if(index < 0)
+    {
+      showingLawsBroken.push({"personID": personID, "lawsBroken": [], "breakableLaws": []});
+      index = showingLawsBroken.length - 1;
+
+      Axios.get(baseUrl + `/getLawsBroken/${personID}`).then(response => {
+        showingLawsBroken[index].lawsBroken = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    }
+    else //if he already exists, just remove him
+    {
+      showingLawsBroken.splice(index, 1);
+
+      //now that we're finished, rerender;
+      setTableView([]);
+    }
+  }
+
+  function PrintLawsBroken(props) {
+    var index = showingLawsBroken.findIndex((val) => {return val.personID == props.person.individualID});
+    if(index < 0)
+      return null;
+
+    var lawsList = showingLawsBroken[index].lawsBroken;
+
+    return (
+      <tr>
+        <td colSpan="7">
+              <b>Laws broken</b>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Law Name</th>
+                    <th>Sentence</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    lawsList.map(law => (
+                      <tr>
+                        <td>{law.lawName}</td>
+                        <td>{law.sentence}</td>
+                        <td><Button size="sm" variant="danger" type="delete" onClick={() => UnBreakLaw(law.lawID)}>Delete</Button></td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </Table>
+              <Form>
+                <Form.Control
+                  size="m"
+                  type="text"
+                  onChange={(input) => {
+                    if(input.target.value) {
+                      GetBreakableLaws(input.target.value, index)
+                    }
+                    else {
+                      showingLawsBroken[index].breakableLaws = [];
+                    }
+                  }}
+                  placeholder="Search for existing laws to add to list of laws broken by this person"
+                />
+              </Form>
+              <Button size="sm" type="search" onClick={() => {
+                  setTableView([]);
+                }}>Search</Button>
+              <Button size="sm" variant="danger" type="delete" onClick={() => {
+                  showingLawsBroken[index].breakableLaws = [];
+                  setTableView([]);
+                }}>Clear Results</Button>
+              <DisplayAddableBusinesses index={index}/>
+        </td>
+      </tr>
+    );
+  }
+
+  function GetBreakableLaws(searchInput, index) {
+    Axios.get(baseUrl + `/searchLaws/${searchInput}`).then(response => {
+      showingLawsBroken[index].breakableLaws = response.data;
+      //setTableView([]);
+    });
+  }
+
+  function PrintBreakableLaws(props) {
+    var index = props.index;
+
+    if(showingLawsBroken[index].breakableLaws.length == 0)
+      return null;
+
+    return (
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>Law Name</th>
+            <th>Sentence</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>{
+          showingLawsBroken[index].breakableLaws.map(law => {
+            return (
+              <tr>
+                <td>{law.lawName}</td>
+                <td>{law.sentence}</td>
+                <td><Button size="sm" type="submit" onClick={() => BreakLaw(law.lawID, showingLawsBroken[index].personID)}>Add</Button></td>
+              </tr>
+            )
+          })
+        }</tbody>
+      </Table>
+    );
+  }
+
+  function BreakLaw(lawID, personID) {
+    const lawUrl = baseUrl + `/breakLaw/${lawID}/${personID}`;
+
+    Axios.post(lawUrl).then(resonse => {
+      Axios.get(baseUrl + `/getLawsBroken/${personID}`).then(response => {
+        var index = showingLawsBroken.findIndex((val) => {return val.personID == personID});
+        showingLawsBroken[index].lawsBroken = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    });
+  }
+
+  function UnBreakLaw(id) {
+    const unBreakLawUrl = baseUrl + `/unBreakLaw/${id}`;
+    Axios.delete(unBreakLawUrl).then((respons) => {
+      //the things removed from the database, we just need to remove it from the array
+      showingLawsBroken.map((person) => {
+        var i = person.lawsBroken.findIndex((law) => {return law.lawID == id});
+        if(i >= 0)
+          person.lawsBroken.splice(i, 1);
+
+        return i;
       });
 
       setTableView([]); //rerender now that the thing in the array has been removed
