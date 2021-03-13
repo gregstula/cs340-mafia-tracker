@@ -302,6 +302,7 @@ function Individuals() {
 
   function PrintLawsBroken(props) {
     var index = showingLawsBroken.findIndex((val) => {return val.personID == props.person.individualID});
+
     if(index < 0)
       return null;
 
@@ -325,7 +326,7 @@ function Individuals() {
                       <tr>
                         <td>{law.lawName}</td>
                         <td>{law.sentence}</td>
-                        <td><Button size="sm" variant="danger" type="delete" onClick={() => UnBreakLaw(law.lawID)}>Delete</Button></td>
+                        <td><Button size="sm" variant="danger" type="delete" onClick={() => UnBreakLaw(law.lawID, props.person.individualID)}>Delete</Button></td>
                       </tr>
                     ))
                   }
@@ -353,7 +354,7 @@ function Individuals() {
                   showingLawsBroken[index].breakableLaws = [];
                   setTableView([]);
                 }}>Clear Results</Button>
-              <DisplayAddableBusinesses index={index}/>
+              <PrintBreakableLaws index={index}/>
         </td>
       </tr>
     );
@@ -399,7 +400,7 @@ function Individuals() {
   function BreakLaw(lawID, personID) {
     const lawUrl = baseUrl + `/breakLaw/${lawID}/${personID}`;
 
-    Axios.post(lawUrl).then(resonse => {
+    Axios.put(lawUrl).then(resonse => {
       Axios.get(baseUrl + `/getLawsBroken/${personID}`).then(response => {
         var index = showingLawsBroken.findIndex((val) => {return val.personID == personID});
         showingLawsBroken[index].lawsBroken = response.data;
@@ -409,12 +410,12 @@ function Individuals() {
     });
   }
 
-  function UnBreakLaw(id) {
-    const unBreakLawUrl = baseUrl + `/unBreakLaw/${id}`;
+  function UnBreakLaw(lawID, personID) {
+    const unBreakLawUrl = baseUrl + `/unBreakLaw/${lawID}/${personID}`;
     Axios.delete(unBreakLawUrl).then((respons) => {
       //the things removed from the database, we just need to remove it from the array
       showingLawsBroken.map((person) => {
-        var i = person.lawsBroken.findIndex((law) => {return law.lawID == id});
+        var i = person.lawsBroken.findIndex((law) => {return law.lawID == lawID});
         if(i >= 0)
           person.lawsBroken.splice(i, 1);
 
@@ -427,10 +428,11 @@ function Individuals() {
 
 
   function DropDownPersonActions (props) {
-    //<Dropdown.Item as="button" onClick={() => ShowLawsBrokenSubTable(props.index)}>Show laws broken</Dropdown.Item>
+
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
         <Dropdown.Item as="button" onClick={() => GetBusinessesOwned(props.person.individualID)}>Show businesses owned</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => GetLawsBroken(props.person.individualID)}>Show laws broken</Dropdown.Item>
         <Dropdown.Item as={UpdateModal} person={props.person} />
         <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.individualID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -486,7 +488,6 @@ function Individuals() {
     });
   };
 
-	//<LawsBroken index={index} />
 
    return (
     <Container fluid>
@@ -529,6 +530,7 @@ function Individuals() {
               <Fragment key={person.individualID}>
                 <PersonRow person={person} />
                 <PrintBusinessesOwned person={person} />
+                <PrintLawsBroken person={person} />
               </Fragment>
             ))
           }
