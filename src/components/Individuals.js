@@ -44,6 +44,18 @@ class IndividualForm extends React.Component {
             <Form.Group as={Col}>
               <Form.Control size="sm" type="text" placeholder="Age" name="age" value={this.state.age} onChange={this.handleOnChange} />
             </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
+            <Form.Group as={Col}>
+              <Form.Control size="sm" type="text" placeholder="Mafia family (exact)" name="mafiaFamily" value={this.state.mafiaFamily} onChange={this.handleOnChange} />
+            </Form.Group>
+            <Form.Group as={Col}>
+              <Form.Control size="sm" type="text" placeholder="Role in family" name="mafiaRole" value={this.state.mafiaRole} onChange={this.handleOnChange} />
+            </Form.Group>
+          </Form.Row>
+
+          <Form.Row>
             <Form.Group as={Col}>
               <Button type="submit" onClick={() => this.handleSubmit(this.props.onClick)}>{this.props.type}</Button>
             </Form.Group>
@@ -431,8 +443,8 @@ function Individuals() {
 
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
-        <Dropdown.Item as="button" onClick={() => GetBusinessesOwned(props.person.individualID)}>Show businesses owned</Dropdown.Item>
-        <Dropdown.Item as="button" onClick={() => GetLawsBroken(props.person.individualID)}>Show laws broken</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => GetBusinessesOwned(props.person.individualID)}>Show/Hide businesses owned</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => GetLawsBroken(props.person.individualID)}>Show/Hide laws broken</Dropdown.Item>
         <Dropdown.Item as={UpdateModal} person={props.person} />
         <Dropdown.Item as="button" onClick={() => deleteIndividual(props.person.individualID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -506,7 +518,7 @@ function Individuals() {
 
       <p></p>
 
-	  <IndividualForm type="Create" onClick={addIndividual} />
+	  <IndividualForm type="Create" onClick={addIndividual} data={{"firstName": "", "lastName":"", "age":"", "mafiaFamily":"", "mafiaRole":""}}/>
 
 	  <p></p>
 
