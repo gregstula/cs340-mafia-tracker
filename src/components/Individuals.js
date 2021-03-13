@@ -69,6 +69,7 @@ class IndividualForm extends React.Component {
 
 var showingBusinesses = [];
 var showingLawsBroken = [];
+var searchTerm = "";
 
 function Individuals() {
 
@@ -78,7 +79,11 @@ function Individuals() {
   const baseUrl = serverUrl("individuals");
 
   useEffect(() => {
-    axios.get(baseUrl).then(response => setIndividualList(response.data));
+    var getUrl = baseUrl
+    if(searchTerm != "")
+      getUrl += `/${searchTerm}`;
+
+    axios.get(getUrl).then(response => setIndividualList(response.data));
   }, [tableView]);
 
 
@@ -501,17 +506,21 @@ function Individuals() {
   };
 
 
-   return (
+  return (
     <Container fluid>
       <h1>Individuals</h1>
 
       <Form>
         <Form.Row>
           <Col>
-            <Form.Control size="m" type="text" placeholder="Search" />
+            <Form.Control size="m" type="text" placeholder="Search by first or last name (not both)" onChange={(input) => {
+              searchTerm = input.target.value;
+            }}/>
           </Col>
           <Col>
-            <Button type="search">Search</Button>
+            <Button type="search" onClick={() => {
+              setTableView([]);
+            }}>Search</Button>
           </Col>
         </Form.Row>
       </Form>
