@@ -1,6 +1,6 @@
-import { Container, Form, Button, Row, Col, Table, Dropdown, DropdownButton, Modal } from 'react-bootstrap';
+import { Container, Form, Button, Col, Table, Dropdown, DropdownButton, Modal } from 'react-bootstrap';
 import React from 'react';
-import { Fragment, useEffect, useState, useRef } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Axios from "axios";
 import axios from 'axios';
 import serverUrl from './serverUrl';
@@ -72,7 +72,7 @@ function Businesses() {
   // Fetched the table data when tableView is changed the whole page reRenders with another Select query
   // using businessList as the second argument causes a loop!!
   useEffect(() => {
-    axios.get(baseUrl).then(response => setBusinessList(response.data));
+    axios.get(serverUrl('businesses')).then(response => setBusinessList(response.data));
   }, [tableView]);
 
 

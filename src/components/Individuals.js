@@ -79,8 +79,8 @@ function Individuals() {
   const baseUrl = serverUrl("individuals");
 
   useEffect(() => {
-    var getUrl = baseUrl
-    if(searchTerm != "")
+    var getUrl = serverUrl("individuals")
+    if(searchTerm !== "")
       getUrl += `/${searchTerm}`;
 
     axios.get(getUrl).then(response => setIndividualList(response.data));
@@ -106,7 +106,7 @@ function Individuals() {
 
   function GetBusinessesOwned(personID) {
     //find the guy we're looking for, adding him if he doesn't exist
-    var index = showingBusinesses.findIndex((val) => {return val.personID == personID})
+    var index = showingBusinesses.findIndex((val) => {return val.personID === personID})
     if(index < 0)
     {
       showingBusinesses.push({"personID": personID, "businessesOwned": [], "addableBusinesses": []});
@@ -128,7 +128,7 @@ function Individuals() {
   }
 
   function PrintBusinessesOwned(props) {
-    var index = showingBusinesses.findIndex((val) => {return val.personID == props.person.individualID});
+    var index = showingBusinesses.findIndex((val) => {return val.personID === props.person.individualID});
     if(index < 0)
       return null;
 
@@ -208,7 +208,7 @@ function Individuals() {
 
     var index = props.index;
 
-    if(showingBusinesses[index].addableBusinesses.length == 0)
+    if(showingBusinesses[index].addableBusinesses.length === 0)
       return null;
 
     return (
@@ -255,7 +255,7 @@ function Individuals() {
 
     //if that business was already owned, we need to remove it from the previous owner's businessesOwned
     showingBusinesses.map(person => {
-      var businessIndex = person.businessesOwned.findIndex(business => {return business.businessID == businessID});
+      var businessIndex = person.businessesOwned.findIndex(business => {return business.businessID === businessID});
       if(businessIndex >= 0) {
         //we've got it, so remove it
         person.businessesOwned.splice(businessIndex, 1);
@@ -269,7 +269,7 @@ function Individuals() {
 
     Axios.put(businessUrl).then(resonse => {
       Axios.get(baseUrl + `/getBusinesses/${personID}`).then(response => {
-        var index = showingBusinesses.findIndex((val) => {return val.personID == personID});
+        var index = showingBusinesses.findIndex((val) => {return val.personID === personID});
         showingBusinesses[index].businessesOwned = response.data;
         //now that we're finished, rerender;
         setTableView([]);
@@ -282,7 +282,7 @@ function Individuals() {
     Axios.put(setBusinessOwnerToNullUrl).then((response) => {
       //the things removed from the database, we just need to remove it from the array
       showingBusinesses.map((person) => {
-        var i = person.businessesOwned.findIndex((businessVal) => {return businessVal.businessID == id});
+        var i = person.businessesOwned.findIndex((businessVal) => {return businessVal.businessID === id});
         if(i >= 0)
           person.businessesOwned.splice(i, 1);
 
@@ -296,7 +296,7 @@ function Individuals() {
 
   function GetLawsBroken(personID) {
     //find the guy we're looking for, adding him if he doesn't exist
-    var index = showingLawsBroken.findIndex((val) => {return val.personID == personID})
+    var index = showingLawsBroken.findIndex((val) => {return val.personID === personID})
     if(index < 0)
     {
       showingLawsBroken.push({"personID": personID, "lawsBroken": [], "breakableLaws": []});
@@ -318,7 +318,7 @@ function Individuals() {
   }
 
   function PrintLawsBroken(props) {
-    var index = showingLawsBroken.findIndex((val) => {return val.personID == props.person.individualID});
+    var index = showingLawsBroken.findIndex((val) => {return val.personID === props.person.individualID});
 
     if(index < 0)
       return null;
@@ -387,7 +387,7 @@ function Individuals() {
   function PrintBreakableLaws(props) {
     var index = props.index;
 
-    if(showingLawsBroken[index].breakableLaws.length == 0)
+    if(showingLawsBroken[index].breakableLaws.length === 0)
       return null;
 
     return (
@@ -419,7 +419,7 @@ function Individuals() {
 
     Axios.put(lawUrl).then(resonse => {
       Axios.get(baseUrl + `/getLawsBroken/${personID}`).then(response => {
-        var index = showingLawsBroken.findIndex((val) => {return val.personID == personID});
+        var index = showingLawsBroken.findIndex((val) => {return val.personID === personID});
         showingLawsBroken[index].lawsBroken = response.data;
         //now that we're finished, rerender;
         setTableView([]);
@@ -432,7 +432,7 @@ function Individuals() {
     Axios.delete(unBreakLawUrl).then((respons) => {
       //the things removed from the database, we just need to remove it from the array
       showingLawsBroken.map((person) => {
-        var i = person.lawsBroken.findIndex((law) => {return law.lawID == lawID});
+        var i = person.lawsBroken.findIndex((law) => {return law.lawID === lawID});
         if(i >= 0)
           person.lawsBroken.splice(i, 1);
 
