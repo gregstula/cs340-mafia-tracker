@@ -80,12 +80,14 @@ function Families() {
   // update handler
   const updatefamily = (id, input) => {
     const updateUrl = baseUrl + `/update/${id}`;
-    axios.put(updateUrl, input ).then(response => setTableView([]));
+    axios.put(updateUrl, input).then(response => setTableView([]));
   };
 
-  function DropDownfamilyActions(props) {
+  function DropDownFamilyActions(props) {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
+        <Dropdown.Item as="button" onClick={() => null}>Show/Hide Family members</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => null}>Show/Hide businesses owned</Dropdown.Item>
         <Dropdown.Item as={UpdateModal} family={props.family} />
         <Dropdown.Item as="button" onClick={() => deletefamily(props.family.familyID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -136,7 +138,7 @@ function Families() {
         <td>{props.family.familyName}</td>
         <td>{props.family.memberCount}</td>
         <td>
-          <DropDownfamilyActions family={props.family} />
+          <DropDownFamilyActions family={props.family} />
         </td>
       </tr>
     );
