@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/cs340-mafia-tracker/static/css/main.8c8b27cf.chunk.css",
-    "main.js": "/cs340-mafia-tracker/static/js/main.00a7837f.chunk.js",
-    "main.js.map": "/cs340-mafia-tracker/static/js/main.00a7837f.chunk.js.map",
+    "main.js": "/cs340-mafia-tracker/static/js/main.c7f04098.chunk.js",
+    "main.js.map": "/cs340-mafia-tracker/static/js/main.c7f04098.chunk.js.map",
     "runtime-main.js": "/cs340-mafia-tracker/static/js/runtime-main.9a613b68.js",
     "runtime-main.js.map": "/cs340-mafia-tracker/static/js/runtime-main.9a613b68.js.map",
     "static/css/2.658248ec.chunk.css": "/cs340-mafia-tracker/static/css/2.658248ec.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.658248ec.chunk.css",
     "static/js/2.8e1cb094.chunk.js",
     "static/css/main.8c8b27cf.chunk.css",
-    "static/js/main.00a7837f.chunk.js"
+    "static/js/main.c7f04098.chunk.js"
   ]
 }
