@@ -147,7 +147,7 @@ function Individuals() {
                     <th>City</th>
                     <th>State</th>
                     <th>Zip</th>
-                    <th>Family owner</th>
+                    <th>Family Owner</th>
                     <th>Actions</th>
                   </tr>
                 </thead>
@@ -218,8 +218,8 @@ function Individuals() {
             <th>Business Name</th>
             <th>City</th>
             <th>State</th>
-            <th>Current Owner</th>
-            <th>Family Owner</th>
+            <th>Current Individual Owner</th>
+            <th>Current Family Owner</th>
             <th>Actions</th>
           </tr>
         </thead>

@@ -90,7 +90,7 @@ function Families() {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
         <Dropdown.Item as="button" onClick={() => GetMembers(props.family.familyID)}>Show/Hide Family members</Dropdown.Item>
-        <Dropdown.Item as="button" onClick={() => /*GetBusinesses(props.family.familyID)*/null}>Show/Hide businesses owned</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => GetBusinesses(props.family.familyID)}>Show/Hide businesses owned</Dropdown.Item>
         <Dropdown.Item as={UpdateModal} family={props.family} />
         <Dropdown.Item as="button" onClick={() => deletefamily(props.family.familyID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -304,6 +304,207 @@ function Families() {
   }
 
 
+  function GetBusinesses(familyID) {
+    //find the business we're looking for, adding it if it doesn't exist
+    var index = showingBusinesses.findIndex((val) => {return val.familyID === familyID})
+    if(index < 0)
+    {
+      showingBusinesses.push({"familyID": familyID, "businesses": [], "potentialBusinesses": []});
+      index = showingBusinesses.length - 1;
+
+      Axios.get(baseUrl + `/getBusinesses/${familyID}`).then(response => {
+        showingBusinesses[index].businesses = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    }
+    else //if he already exists, just remove him
+    {
+      showingBusinesses.splice(index, 1);
+
+      //now that we're finished, rerender;
+      setTableView([]);
+    }
+  }
+
+  function PrintBusinesses(props) {
+    var index = showingBusinesses.findIndex((val) => {return val.familyID === props.family.familyID});
+
+    if(index < 0)
+      return null;
+
+    var businessesList = showingBusinesses[index].businesses;
+
+    return (
+      <tr>
+        <td colSpan="7">
+              <b>Businesses Owned</b>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                  <th>Name</th>
+                  <th>Number</th>
+                  <th>street Name</th>
+                  <th>City</th>
+                  <th>State</th>
+                  <th>Zip</th>
+                  <th>Individual Owner</th>
+                  <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    businessesList.map(business => {
+
+                      var fName = business.firstName;
+                      var lName = business.lastName;
+                      if(!fName)
+                        fName = "";
+                      else
+                        lName = " " + lName;
+                      if(!lName)
+                        lName = "";
+
+                      return(
+                        <tr>
+                          <td>{business.businessName}</td>
+                          <td>{business.buildingNumber}</td>
+                          <td>{business.streetName}</td>
+                          <td>{business.city}</td>
+                          <td>{business.state}</td>
+                          <td>{business.zip}</td>
+                          <td>{fName + lName}</td>
+                          <td><Button size="sm" variant="danger" type="delete" onClick={() => RemoveBusiness(business.businessID)}>Delete</Button></td>
+                        </tr>
+                      )
+                    })
+                  }
+                </tbody>
+              </Table>
+              <Form>
+                <Form.Control
+                  size="m"
+                  type="text"
+                  onChange={(input) => {
+                    if(input.target.value) {
+                      GetPotentialBusinesses(input.target.value, index)
+                    }
+                    else {
+                      showingBusinesses[index].potentialBusinesses = [];
+                    }
+                  }}
+                  placeholder="Search for existing businesses to be owned by the family"
+                />
+              </Form>
+              <Button size="sm" type="search" onClick={() => {
+                  setTableView([]);
+                }}>Search</Button>
+              <Button size="sm" variant="danger" type="delete" onClick={() => {
+                  showingBusinesses[index].potentialBusinesses = [];
+                  setTableView([]);
+                }}>Clear Results</Button>
+              <PrintPotentialBusinesses index={index}/>
+        </td>
+      </tr>
+    );
+  }
+
+  function GetPotentialBusinesses(searchInput, index) {
+    Axios.get(baseUrl + `/searchBusinesses/${searchInput}`).then(response => {
+      showingBusinesses[index].potentialBusinesses = response.data;
+      //setTableView([]);
+    });
+  }
+
+  function PrintPotentialBusinesses(props) {
+    var index = props.index;
+
+    if(showingBusinesses[index].potentialBusinesses.length === 0)
+      return null;
+
+    return (
+      <Table bordered hover>
+        <thead>
+          <tr>
+          <th>Business Name</th>
+          <th>City</th>
+          <th>State</th>
+          <th>Current Individual Owner</th>
+          <th>Current Family Owner</th>
+          <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>{
+          showingBusinesses[index].potentialBusinesses.map(business => {
+            var fName = business.firstName;
+            var lName = business.lastName;
+            if(!fName)
+              fName = "";
+            else
+              lName = " " + lName;
+            if(!lName)
+              lName = "";
+
+            return (
+              <tr>
+                <td>{business.businessName}</td>
+                <td>{business.city}</td>
+                <td>{business.state}</td>
+                <td>{fName + lName}</td>
+                <td>{business.familyName}</td>
+                <td><Button size="sm" type="submit" onClick={() => AddBusiness(business.businessID, showingBusinesses[index].familyID)}>Add</Button></td>
+              </tr>
+            )
+          })
+        }</tbody>
+      </Table>
+    );
+  }
+
+  function AddBusiness(businessID, familyID) {
+    const newBusinessUrl = baseUrl + `/addBusiness/${businessID}/${familyID}`;
+
+    //if that business was already owned by a family, we need to remove it from the previous family
+    showingBusinesses.map(family => {
+      var i = family.businesses.findIndex(business => {return business.businessID === businessID});
+      if(i >= 0) {
+        //we've got it, so remove it
+        family.businesses.splice(i, 1);
+        //return true so that we stop looking
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+
+    Axios.put(newBusinessUrl).then(resonse => {
+      Axios.get(baseUrl + `/getBusinesses/${familyID}`).then(response => {
+        var index = showingBusinesses.findIndex((val) => {return val.familyID === familyID});
+        showingBusinesses[index].businesses = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    });
+  }
+
+  function RemoveBusiness(id) {
+    const removeBusinessUrl = baseUrl + `/removeBusiness/${id}`;
+    Axios.put(removeBusinessUrl).then((response) => {
+      //the things removed from the database, we just need to remove it from the array
+      showingBusinesses.map((family) => {
+        var i = family.businesses.findIndex((business) => {return business.businessID === id});
+        if(i >= 0)
+          family.businesses.splice(i, 1);
+
+        return i;
+      });
+
+      setTableView([]); //rerender now that the thing in the array has been removed
+    });
+  }
+
+
   function FamilyRow(props) {
     return (
       <tr>
@@ -338,6 +539,7 @@ function Families() {
               <Fragment key={family.familyID}>
                 <FamilyRow family={family} />
                 <PrintMembers family={family} />
+                <PrintBusinesses family={family} />
               </Fragment>
             ))
           }
