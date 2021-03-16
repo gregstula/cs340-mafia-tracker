@@ -297,9 +297,12 @@ function Laws() {
     Axios.delete(removeLawBreakerUrl).then((response) => {
       //the things removed from the database, we just need to remove it from the array
       showingLawBreakers.map((law) => {
-        var i = law.lawBreakers.findIndex((person) => {return person.personID === personID});
+        var i = law.lawBreakers.findIndex((person) => {return person.individualID === personID});
         if(i >= 0)
           law.lawBreakers.splice(i, 1);
+        else {
+          console.log("not found");
+        }
 
         return i;
       });
