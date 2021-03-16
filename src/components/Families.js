@@ -1,4 +1,4 @@
-import { Container, Form, Button, Row, Col, Table, Dropdown, DropdownButton, Modal } from 'react-bootstrap';
+import { Container, Form, Button/*, Row*/, Col, Table, Dropdown, DropdownButton, Modal } from 'react-bootstrap';
 import React from 'react';
 import { Fragment, useEffect, useState, useRef } from "react";
 import Axios from "axios";
@@ -47,6 +47,9 @@ class FamilyForm extends React.Component {
   }
 }
 
+var showingBusinesses = [];
+var showingMembers = [];
+
 function Families() {
 
   const [familyList, setfamilyList] = useState([]);
@@ -86,8 +89,8 @@ function Families() {
   function DropDownFamilyActions(props) {
     return (
       <DropdownButton id="dropdown-item-button" title="Actions">
-        <Dropdown.Item as="button" onClick={() => null}>Show/Hide Family members</Dropdown.Item>
-        <Dropdown.Item as="button" onClick={() => null}>Show/Hide businesses owned</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => GetMembers(props.family.familyID)}>Show/Hide Family members</Dropdown.Item>
+        <Dropdown.Item as="button" onClick={() => /*GetBusinesses(props.family.familyID)*/null}>Show/Hide businesses owned</Dropdown.Item>
         <Dropdown.Item as={UpdateModal} family={props.family} />
         <Dropdown.Item as="button" onClick={() => deletefamily(props.family.familyID)}>Delete</Dropdown.Item>
       </DropdownButton>
@@ -131,6 +134,176 @@ function Families() {
   }
 
 
+  function GetMembers(familyID) {
+    //find the guy we're looking for, adding him if he doesn't exist
+    var index = showingMembers.findIndex((val) => {return val.familyID === familyID})
+    if(index < 0)
+    {
+      showingMembers.push({"familyID": familyID, "members": [], "potentialMembers": []});
+      index = showingMembers.length - 1;
+
+      Axios.get(baseUrl + `/getMembers/${familyID}`).then(response => {
+        showingMembers[index].members = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    }
+    else //if he already exists, just remove him
+    {
+      showingMembers.splice(index, 1);
+
+      //now that we're finished, rerender;
+      setTableView([]);
+    }
+  }
+
+  function PrintMembers(props) {
+    var index = showingMembers.findIndex((val) => {return val.familyID === props.family.familyID});
+
+    if(index < 0)
+      return null;
+
+    var membersList = showingMembers[index].members;
+
+    return (
+      <tr>
+        <td colSpan="7">
+              <b>Members</b>
+              <Table striped bordered hover>
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Role</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {
+                    membersList.map(member => (
+                      <tr>
+                        <td>{member.firstName + " " + member.lastName}</td>
+                        <td>{member.age}</td>
+                        <td>{member.mafiaRole}</td>
+                        <td><Button size="sm" variant="danger" type="delete" onClick={() => RemoveMember(member.individualID)}>Delete</Button></td>
+                      </tr>
+                    ))
+                  }
+                </tbody>
+              </Table>
+              <Form>
+                <Form.Control
+                  size="m"
+                  type="text"
+                  onChange={(input) => {
+                    if(input.target.value) {
+                      GetPotentialMembers(input.target.value, index)
+                    }
+                    else {
+                      showingMembers[index].potentialMembers = [];
+                    }
+                  }}
+                  placeholder="Search for existing people to add to the family"
+                />
+              </Form>
+              <Button size="sm" type="search" onClick={() => {
+                  setTableView([]);
+                }}>Search</Button>
+              <Button size="sm" variant="danger" type="delete" onClick={() => {
+                  showingMembers[index].potentialMembers = [];
+                  setTableView([]);
+                }}>Clear Results</Button>
+              <PrintPotentialMembers index={index}/>
+        </td>
+      </tr>
+    );
+  }
+
+  function GetPotentialMembers(searchInput, index) {
+    Axios.get(baseUrl + `/searchPeople/${searchInput}`).then(response => {
+      showingMembers[index].potentialMembers = response.data;
+      //setTableView([]);
+    });
+  }
+
+  function PrintPotentialMembers(props) {
+    var index = props.index;
+
+    if(showingMembers[index].potentialMembers.length === 0)
+      return null;
+
+    return (
+      <Table bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Age</th>
+            <th>Current Family</th>
+            <th>Current Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>{
+          showingMembers[index].potentialMembers.map(guy => {
+            return (
+              <tr>
+                <td>{guy.firstName + " " + guy.lastName}</td>
+                <td>{guy.age}</td>
+                <td>{guy.familyName}</td>
+                <td>{guy.mafiaRole}</td>
+                <td><Button size="sm" type="submit" onClick={() => AddMember(guy.individualID, showingMembers[index].familyID)}>Add</Button></td>
+              </tr>
+            )
+          })
+        }</tbody>
+      </Table>
+    );
+  }
+
+  function AddMember(personID, familyID) {
+    const newMemberUrl = baseUrl + `/addMember/${personID}/${familyID}`;
+
+    //if that person was already a member of a family, we need to remove it from the previous family
+    showingMembers.map(family => {
+      var i = family.members.findIndex(person => {return person.individualID === personID});
+      if(i >= 0) {
+        //we've got it, so remove it
+        family.members.splice(i, 1);
+        //return true so that we stop looking
+        return true;
+      }
+      else {
+        return false;
+      }
+    });
+
+    Axios.put(newMemberUrl).then(resonse => {
+      Axios.get(baseUrl + `/getMembers/${familyID}`).then(response => {
+        var index = showingMembers.findIndex((val) => {return val.familyID === familyID});
+        showingMembers[index].members = response.data;
+        //now that we're finished, rerender;
+        setTableView([]);
+      });
+    });
+  }
+
+  function RemoveMember(id) {
+    const removeMemberUrl = baseUrl + `/removeMember/${id}`;
+    Axios.put(removeMemberUrl).then((response) => {
+      //the things removed from the database, we just need to remove it from the array
+      showingMembers.map((family) => {
+        var i = family.members.findIndex((person) => {return person.individualID === id});
+        if(i >= 0)
+          family.members.splice(i, 1);
+
+        return i;
+      });
+
+      setTableView([]); //rerender now that the thing in the array has been removed
+    });
+  }
+
+
   function FamilyRow(props) {
     return (
       <tr>
@@ -164,6 +337,7 @@ function Families() {
             familyList.map((family, index) => (
               <Fragment key={family.familyID}>
                 <FamilyRow family={family} />
+                <PrintMembers family={family} />
               </Fragment>
             ))
           }
